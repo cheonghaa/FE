@@ -140,7 +140,7 @@ Rename: 파일 또는 폴더 이름 변경
 Remove: 파일 삭제
 !BreakingChange: 커다란 API 변경
 !HotFix: 치명적인 버그 긴급 수정
-```
+
 ### 📚 참고 자료
 ```
 https://hyunjun.kr/21
