@@ -1,4 +1,3 @@
-
 # Mooluck_frontend
 
 <br/>
@@ -148,4 +147,7 @@ Remove: 파일 삭제
 https://hyunjun.kr/21
 
 
+<<<<<<< HEAD
 >>>>>>> 1b958b2 (Chore : 프론트 초기 셋팅)
+=======
+>>>>>>> 1b958b2754be0139c088535c73923fb24fa0cff6
