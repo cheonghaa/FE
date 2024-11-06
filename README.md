@@ -1,14 +1,12 @@
-# Mooluck_frontend
+# Mooluck Frontend
 
-<br/>
-KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong> 입니다.
-<br/>
+**KDT 독거 노인을 위한 무럭이 서비스,** <strong>Mooluck</strong>입니다.
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/1774a899-69f2-4193-9fb2-8f7bea9867a6" width="300" height="300" />
 </p>
 
-<br/>
-<br/>
+---
 
 <h2 align="center">💻 프로젝트 팀 소개 💻</h2>
 
@@ -16,75 +14,56 @@ KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong
   <tr height="160px">
     <td align="center" width="150px">
       <a href="https://github.com/cheonghaa">
-        <img
-          src="https://avatars.githubusercontent.com/u/148474216?v=4"
-          height="130px"
-          width="130px"
-        /><br />
+        <img src="https://avatars.githubusercontent.com/u/148474216?v=4" height="130px" width="130px" />
+        <br />
         <strong>이도윤</strong><br />
-        <span style="font-size:12px;">팀장(PM), Open AI 연동</span>
+        <span>팀장(PM), Open AI 연동</span>
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/heodoong">
-        <img
-          src="https://avatars.githubusercontent.com/u/170384564?v=4"
-          height="130px"
-          width="130px"
-        /><br />
+        <img src="https://avatars.githubusercontent.com/u/170384564?v=4" height="130px" width="130px" />
+        <br />
         <strong>서수호</strong><br />
-        <span style="font-size:12px;">프론트엔드 설계, 연구 자료 조사</span>
+        <span>프론트엔드 설계, 연구 자료 조사</span>
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/kogunwoo">
-        <img
-          src="https://avatars.githubusercontent.com/u/113786196?v=4"
-          height="130px"
-          width="130px"
-        /><br />
+        <img src="https://avatars.githubusercontent.com/u/113786196?v=4" height="130px" width="130px" />
+        <br />
         <strong>고건우</strong><br />
-        <span style="font-size:12px;">백엔드 설계, API 통합 연동</span>
+        <span>백엔드 설계, API 통합 연동</span>
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/YooSeokHwan">
-        <img
-          src="https://avatars.githubusercontent.com/u/170384539?v=4"
-          height="130px"
-          width="130px"
-        /><br />
+        <img src="https://avatars.githubusercontent.com/u/170384539?v=4" height="130px" width="130px" />
+        <br />
         <strong>유석환</strong><br />
-        <span style="font-size:12px;">DB 설계 및 데이터 시각화, GitHub 관리</span>
+        <span>DB 설계 및 데이터 시각화, GitHub 관리</span>
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/yeonsoo1010">
-        <img
-          src="https://avatars.githubusercontent.com/u/128021464?v=4"
-          height="130px"
-          width="130px"
-        /><br />
+        <img src="https://avatars.githubusercontent.com/u/128021464?v=4" height="130px" width="130px" />
+        <br />
         <strong>조연수</strong><br />
-        <span style="font-size:12px;">UI/UX 디자인, 반응 애니메이션 및 인터랙션</span>
+        <span>UI/UX 디자인, 반응 애니메이션 및 인터랙션</span>
       </a>
     </td>
     <td align="center" width="150px">
       <a href="https://github.com/wpfkf4644">
-        <img
-          src="https://avatars.githubusercontent.com/u/170283983?v=4"
-          height="130px"
-          width="130px"
-        /><br />
+        <img src="https://avatars.githubusercontent.com/u/170283983?v=4" height="130px" width="130px" />
+        <br />
         <strong>안젤라</strong><br />
-        <span style="font-size:12px;">인증 및 보안 시스템 개발, 서버 인프라 구축</span>
+        <span>인증 및 보안 시스템 개발, 서버 인프라 구축</span>
       </a>
     </td>
   </tr>
 </table>
 
-
-<br/>
+---
 
 <h1 align="center">🛠️ 개발 가이드 🛠️</h1>
 
@@ -109,13 +88,12 @@ KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong
 
 ### 📥 PR 예시 (Pull Request Example)
 - **PR 제목 형식** : `[날짜]-[이름]-[기능] [작업 내용]`
-
-  예시:
-  ```
+ 
+ ```
   2024-11-06 유무럭 로그인 기능 추가
   2024-11-06 유무럭 목표 자산 조회 기능 CSS 수정
  ```
-```
+
 ### 🚀 배포 방법
 - `master`로 **merge가 일어나면 자동으로 배포**가 이루어지도록 설정(CI/CD).
 - `master` 브랜치는 항상 최신 상태를 유지해야 합니다.
@@ -124,24 +102,3 @@ KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong
 
 ### ✏️ 커밋 메시지 규칙
 커밋 메시지의 명확한 구분을 위해 다음 규칙을 준수합니다.
-```
-
-Feat: 새로운 기능 추가
-Fix: 버그 수정
-Docs: 문서 수정
-Style: 코드 포맷팅, 세미콜론 누락 등 코드 변경이 없는 경우
-Refactor: 코드 리팩토링
-Test: 테스트 코드 추가 또는 리팩토링
-Chore: 패키지 매니저 수정, 기타 변경
-Design: CSS 등 UI 디자인 변경
-Comment: 주석 추가 및 변경
-Rename: 파일 또는 폴더 이름 변경
-Remove: 파일 삭제
-!BreakingChange: 커다란 API 변경
-!HotFix: 치명적인 버그 긴급 수정
-```
-### 📚 참고 자료
-```
-https://hyunjun.kr/21
-
-
