@@ -7,7 +7,6 @@ KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong
   <img src="https://github.com/user-attachments/assets/1774a899-69f2-4193-9fb2-8f7bea9867a6" width="300" height="300" />
 </p>
 
-
 <br/>
 <br/>
 
@@ -112,21 +111,22 @@ KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong
 - **PR 제목 형식** : `[날짜]-[이름]-[기능] [작업 내용]`
 
   예시:
+  ```
   2024-11-06 유무럭 로그인 기능 추가
   2024-11-06 유무럭 목표 자산 조회 기능 CSS 수정
  ```
 ---
-```
+
 ### 🚀 배포 방법
 - `master`로 **merge가 일어나면 자동으로 배포**가 이루어지도록 설정(CI/CD).
 - `master` 브랜치는 항상 최신 상태를 유지해야 합니다.
 
 ---
-```
+
 ### ✏️ 커밋 메시지 규칙
 커밋 메시지의 명확한 구분을 위해 다음 규칙을 준수합니다.
-```
 
+```
 Feat: 새로운 기능 추가
 Fix: 버그 수정
 Docs: 문서 수정
@@ -140,8 +140,9 @@ Rename: 파일 또는 폴더 이름 변경
 Remove: 파일 삭제
 !BreakingChange: 커다란 API 변경
 !HotFix: 치명적인 버그 긴급 수정
-
 ```
 ### 📚 참고 자료
+```
 https://hyunjun.kr/21
+
 
