@@ -4,7 +4,7 @@
 KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong> 입니다.
 <br/>
 <p align="center">
-  <img src="<img width="113" alt="화면 캡처 2024-11-06 193311" src="https://github.com/user-attachments/assets/1774a899-69f2-4193-9fb2-8f7bea9867a6">" width="300" height="300" />
+  <img src="https://github.com/user-attachments/assets/1774a899-69f2-4193-9fb2-8f7bea9867a6" width="300" height="300" />
 </p>
 
 
