@@ -7,6 +7,7 @@ KDT 독거 노인을 위한 무럭이 서비스입니다.<strong>Mooluck</strong
   <img src="https://github.com/user-attachments/assets/f0cd42d3-431d-4e66-a382-3a1650110b14" width="300" height="300" />
 </p>
 
+
 <br/>
 <br/>
 

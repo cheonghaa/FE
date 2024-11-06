@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/HomePage.vue'
-import NotFoundPage from '@/views/NotFoundPage.vue' 
+import NotFoundPage from '@/views/NotFoundPage.vue'
 
 const routes = [
-  // 코드 홈페이지
+  // 코드 홈페이지 무럭이
   {
     path: '/',
     name: 'home',

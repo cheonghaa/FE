@@ -6,9 +6,13 @@ const route = useRoute();
 
 const titleMapping = {
   home: '홈페이지',
+
   admin: '관리자페이지',
+
   adminlogin: '관리자로그인페이지',
+
   interaction: '무럭이 상호페이지',
+  
   mooluck: '무럭이 페이지'
 };
 
