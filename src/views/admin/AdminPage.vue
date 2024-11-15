@@ -223,10 +223,3 @@ thead {
   background-color: #f2f2f2;
 }
 </style>
-<template>
-  <div>관리자 페이지</div>
-</template>
-
-<script setup></script>
-
-<style scoped></style>
