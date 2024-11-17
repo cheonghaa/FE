@@ -17,6 +17,7 @@ export const useAuthStore = defineStore('auth', {
           elderAccount,
           elderPwd,
         });
+        console.log('백엔드 응답:', response.data); // 응답 데이터 확인
 
         if (response.data.success === "true") {
           this.isLoggedIn = true;
