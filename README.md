@@ -5,81 +5,62 @@
 
 **KDT 독거 노인을 위한 무럭이 서비스,** <strong>Mooluck</strong>입니다.
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/1774a899-69f2-4193-9fb2-8f7bea9867a6" width="300" height="300" />
+<p style="text-align: center;">
   <img src="https://github.com/user-attachments/assets/1774a899-69f2-4193-9fb2-8f7bea9867a6" width="300" height="300" />
 </p>
 
 ---
 ---
 
-<h2 align="center">💻 프로젝트 팀 소개 💻</h2>
+<h2 style="text-align: center;">💻 프로젝트 팀 소개 💻</h2>
 
-<table align="center">
+<table style="text-align: center;">
   <tr height="160px">
-    <td align="center" width="150px">
+    <td style="text-align: center; width: 150px;">
       <a href="https://github.com/cheonghaa">
-        <img src="https://avatars.githubusercontent.com/u/148474216?v=4" height="130px" width="130px" />
-        <br />
         <img src="https://avatars.githubusercontent.com/u/148474216?v=4" height="130px" width="130px" />
         <br />
         <strong>이도윤</strong><br />
         <span>팀장(PM), Open AI 연동</span>
-        <span>팀장(PM), Open AI 연동</span>
       </a>
     </td>
-    <td align="center" width="150px">
+    <td style="text-align: center; width: 150px;">
       <a href="https://github.com/heodoong">
-        <img src="https://avatars.githubusercontent.com/u/170384564?v=4" height="130px" width="130px" />
-        <br />
         <img src="https://avatars.githubusercontent.com/u/170384564?v=4" height="130px" width="130px" />
         <br />
         <strong>서수호</strong><br />
         <span>프론트엔드 설계, 연구 자료 조사</span>
-        <span>프론트엔드 설계, 연구 자료 조사</span>
       </a>
     </td>
-    <td align="center" width="150px">
+    <td style="text-align: center; width: 150px;">
       <a href="https://github.com/kogunwoo">
-        <img src="https://avatars.githubusercontent.com/u/113786196?v=4" height="130px" width="130px" />
-        <br />
         <img src="https://avatars.githubusercontent.com/u/113786196?v=4" height="130px" width="130px" />
         <br />
         <strong>고건우</strong><br />
         <span>백엔드 설계, API 통합 연동</span>
-        <span>백엔드 설계, API 통합 연동</span>
       </a>
     </td>
-    <td align="center" width="150px">
+    <td style="text-align: center; width: 150px;">
       <a href="https://github.com/YooSeokHwan">
-        <img src="https://avatars.githubusercontent.com/u/170384539?v=4" height="130px" width="130px" />
-        <br />
         <img src="https://avatars.githubusercontent.com/u/170384539?v=4" height="130px" width="130px" />
         <br />
         <strong>유석환</strong><br />
         <span>DB 설계 및 데이터 시각화, GitHub 관리</span>
-        <span>DB 설계 및 데이터 시각화, GitHub 관리</span>
       </a>
     </td>
-    <td align="center" width="150px">
+    <td style="text-align: center; width: 150px;">
       <a href="https://github.com/yeonsoo1010">
-        <img src="https://avatars.githubusercontent.com/u/128021464?v=4" height="130px" width="130px" />
-        <br />
         <img src="https://avatars.githubusercontent.com/u/128021464?v=4" height="130px" width="130px" />
         <br />
         <strong>조연수</strong><br />
         <span>UI/UX 디자인, 반응 애니메이션 및 인터랙션</span>
-        <span>UI/UX 디자인, 반응 애니메이션 및 인터랙션</span>
       </a>
     </td>
-    <td align="center" width="150px">
+    <td style="text-align: center; width: 150px;">
       <a href="https://github.com/wpfkf4644">
         <img src="https://avatars.githubusercontent.com/u/170283983?v=4" height="130px" width="130px" />
         <br />
-        <img src="https://avatars.githubusercontent.com/u/170283983?v=4" height="130px" width="130px" />
-        <br />
         <strong>안젤라</strong><br />
-        <span>인증 및 보안 시스템 개발, 서버 인프라 구축</span>
         <span>인증 및 보안 시스템 개발, 서버 인프라 구축</span>
       </a>
     </td>
@@ -89,7 +70,7 @@
 ---
 ---
 
-<h1 align="center">🛠️ 개발 가이드 🛠️</h1>
+<h1 style="text-align: center;">🛠️ 개발 가이드 🛠️</h1>
 
 ---
 

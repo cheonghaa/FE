@@ -3,7 +3,7 @@
     <p>현재 날씨: {{ weatherDescription }}</p>
     <div class="mooluck-container">
       <video class="interactive-video" autoplay muted loop playsinline @click="handleVideoClick">
-        <source src="@/assets/video/mooluck2.mp4" type="video/mp4" />
+        <source src="@/assets/video/mooluck_noBackground.mp4" type="video/mp4" />
       </video>
       <p class="instruction">무럭이를 쓰다듬어주세요!</p>
     </div>
@@ -23,12 +23,14 @@ const fetchWeather = async () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 
         const response = await axios.get(
           `http://localhost:8080/api/weather?lat=${latitude}&lon=${longitude}`
         )
+        console.log("API 응답 데이터:", response.data);
 
-        const weatherIcon = response.data.response.data.weatherIcon
+        const weatherIcon = response.data.response.data.weatherIcon // API에서 반환한 weatherIcon
         weatherDescription.value = getWeatherDescription(weatherIcon)
         setBackground(weatherIcon)
       },
@@ -48,12 +50,12 @@ const getWeatherDescription = (icon) => {
     '03': 'Clouds',
     '04': 'Broken Clouds',
     '09': 'Rain',
-    10: 'Rain',
-    11: 'Rain',
-    13: 'Snow',
-    50: 'Mist'
+    '10': 'Rain',
+    '11': 'Rain',
+    '13': 'Snow',
+    '50': 'Mist',
   }
-  const code = icon.slice(0, 2)
+  const code = icon.slice(0, 2) // 아이콘의 숫자만 떼어내기, fetch할 때 weather의 icon으로 가져와서 ok
   return weatherMapping[code] || 'Default'
 }
 
@@ -61,17 +63,19 @@ const setBackground = (icon) => {
   const code = icon.slice(0, 2)
   const dayNight = icon.endsWith('d') ? 'D' : 'N'
   const backgroundMapping = {
-    '01': 'clearD_sample',
-    '02': 'cloudsD_sample',
-    '03': 'cloudsD_sample',
-    '04': 'cloudsD_sample',
-    '09': 'rainD_sample',
-    10: 'rainD_sample',
-    11: 'rainD_sample',
-    13: 'snowD_sample',
-    50: 'mistD'
+      "01": `clear${dayNight}`,
+      "02": `clouds${dayNight}`,
+      "03": `clouds${dayNight}`,
+      "04": `brokenClouds${dayNight}`,
+      "09": `rain${dayNight}`,
+      "10": `rain${dayNight}`,
+      "11": `rain${dayNight}`,
+      "13": `snow${dayNight}`,
+      "50": `mist${dayNight}`,
   }
-  backgroundClass.value = backgroundMapping[code] || 'default'
+  const newBackgroundClass = backgroundMapping[code] || 'default';
+  console.log("backgroundClass set to:", newBackgroundClass);
+  backgroundClass.value = backgroundMapping[code] || 'default';
 }
 
 const handleVideoClick = async () => {
@@ -109,29 +113,59 @@ onMounted(() => {
   justify-content: center;
 }
 
-/* 배경 이미지 클래스 */
-.clearD_sample {
-  background-image: url('@/assets/image/clearD_sample.webp');
+/* 모든 날씨 배경화면 - 낮밤 구분 */
+/* 전체 사진 임시 설정 */
+/* cloudsN, brokenCloudsD, brokenCloudsN, rainN, snowN, mistN 사진 임의로 */
+.clearD {
+  background: url("@/assets/image/clearD_sample.webp") no-repeat center center;
+  background-size: cover;
 }
-
-.cloudsD_sample {
-  background-image: url('@/assets/image/cloudsD_sample.webp');
+.clearN {
+  background: url("@/assets/image/clearN_sample.webp") no-repeat center center;
+  background-size: cover;
 }
-
-.rainD_sample {
-  background-image: url('@/assets/image/rainD_sample.webp');
+.cloudsD {
+  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background-size: cover;
 }
-
-.snowD_sample {
-  background-image: url('@/assets/image/snowD_sample.webp');
+.cloudsN { 
+  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background-size: cover;
 }
-
+.brokenCloudsD {
+  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.brokenCloudsN {
+  background: url("@/assets/image/cloudsN_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.rainD {
+  background: url("@/assets/image/rainD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.rainN {
+  background: url("@/assets/image/rainD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.snowD {
+  background: url("@/assets/image/snowD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.snowN {
+  background: url("@/assets/image/snowD_sample.jpeg") no-repeat center center;
+  background-size: cover;
+}
 .mistD {
-  background-image: url('@/assets/image/mistD.jpg');
+  background: url("@/assets/image/mistD_sample.jpeg") no-repeat center center;
+  background-size: cover;
 }
-
+.mistN {
+  background: url("@/assets/image/mistD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
 .default {
-  background-color: #cccccc;
+  background-color: white;
 }
 
 .mooluck-container {
