@@ -34,6 +34,10 @@
         <button @click="goToSignUp" class="signup-button">회원가입</button>
       </div>
     </div>
+    <!-- 뒤로가기 버튼 -->
+    <div class="back-button" @click="goBack">
+      <span>&larr;</span>
+    </div>
   </div>
 </template>
 
@@ -68,6 +72,10 @@ function goToHome() {
 
 function goToSignUp() {
   router.push('/signup') // 회원가입 페이지로 이동
+}
+
+function goBack() {
+  router.push('/') // 뒤로가기 버튼 동작: 홈으로 이동
 }
 </script>
 
@@ -113,7 +121,7 @@ function goToSignUp() {
   background: rgba(0, 0, 0, 0.5);
   color: white;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  width: 350px; /* 무럭이 홈페이지와 동일한 폼 크기 */
+  width: 350px;
   height: auto;
 }
 
@@ -194,5 +202,33 @@ label {
 .signup-button:hover {
   background-color: #218838;
   box-shadow: 0 3px 10px rgba(40, 167, 69, 0.4);
+}
+
+/* 뒤로가기 버튼 */
+.back-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  background-color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 </style>
