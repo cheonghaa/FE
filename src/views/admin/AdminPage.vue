@@ -97,7 +97,7 @@ const drawChart = () => {
       labels: records.value.map((record) => record.lastCheckIn),
       datasets: [
         {
-          label: '상호작용 횟수',
+          label: '총 상호작용 횟수',
           data: records.value.map((record) => record.totalCount),
           borderColor: 'blue',
           fill: false
