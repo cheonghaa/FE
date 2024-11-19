@@ -4,17 +4,12 @@
   >
     <p>현재 날씨: {{ weatherDescription }}</p>
     <div class="mooluck-container">
-      <video
+      <img
         class="interactive-video"
-        autoplay
-        muted
-        loop
-        playsinline
+        src = "@/assets/video/mooluck_gif.gif"
         :class="{ 'water-mode': isWaterTime }"
         @click="handleVideoClick"
       >
-        <source src="@/assets/video/mooluck_noBackground.mp4" type="video/mp4" />
-      </video>
       <p class="instruction" v-if="!isWaterTime">무럭이를 쓰다듬어주세요!</p>
       <p v-else class="water-mode-instruction">지금 무럭이에게 물을 주세요!</p>
     </div>
@@ -180,5 +175,61 @@ onMounted(() => {
 .instruction {
   color: black;
   margin-top: 10px;
+}
+
+/* 모든 날씨 배경화면 - 낮밤 구분 */
+/* 전체 사진 임시 설정 */
+/* cloudsN, brokenCloudsD, brokenCloudsN, rainN, snowN, mistN 사진 임의로 */
+.clearD {
+  background: url("@/assets/image/clearD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.clearN {
+  background: url("@/assets/image/clearN_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.cloudsD {
+  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.cloudsN { 
+  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.brokenCloudsD {
+  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.brokenCloudsN {
+  background: url("@/assets/image/sample_made.png") no-repeat center center;
+  background-size: cover;
+}
+.rainD {
+  background: url("@/assets/image/rainD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.rainN {
+  background: url("@/assets/image/rainD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.snowD {
+  background: url("@/assets/image/snowD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.snowN {
+  background: url("@/assets/image/snowD_sample.jpeg") no-repeat center center;
+  background-size: cover;
+}
+.mistD {
+  background: url("@/assets/image/mistD_sample.jpeg") no-repeat center center;
+  background-size: cover;
+}
+.mistN {
+  background: url("@/assets/image/mistD_sample.webp") no-repeat center center;
+  background-size: cover;
+}
+.default {
+  background: url("@/assets/image/clearD.webp") no-repeat center center;
+  background-size: cover;
 }
 </style>
