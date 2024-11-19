@@ -20,6 +20,12 @@ const routes = [
     name: 'admin',
     component: () => import('@/views/admin/AdminPage.vue')
   },
+  {
+    path: '/signup',
+    name: 'adminsignup',
+    component: () => import('@/views/admin/AdminSignupPage.vue')
+  },
+
   // 유저
   {
     path: '/mooluck',
