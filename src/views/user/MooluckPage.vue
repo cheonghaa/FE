@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 
 // 날씨와 배경 설정 관련 상태값
@@ -125,6 +125,13 @@ const handleVideoClick = async () => {
     alert('오류가 발생했습니다.')
   }
 }
+
+// Water Time 상태 변화 감지
+watch(isWaterTime, (newValue, oldValue) => {
+  if (newValue && !oldValue) {
+    alert('지금 물을 주는 시간이에요!') // 팝업 알림
+  }
+})
 
 // 컴포넌트 마운트 시 실행
 onMounted(() => {
