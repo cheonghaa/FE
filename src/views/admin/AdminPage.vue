@@ -67,19 +67,17 @@ let chart = null
 const router = useRouter()
 
 // API 데이터 불러오기
-const fetchData = async (elderId) => {
+const fetchData = async (staffId) => {
   try {
-    const response = await axios.get(`http://localhost:8080/admin/table?elderId=${elderId}`)
+    const response = await axios.get(`http://localhost:8080/admin/table?staffId=${staffId}`)
     const data = response.data.response.data
-    records.value = [
-      {
-        elderName: data.elderName,
-        elderAddress: data.elderAddress,
-        status: data.status,
-        totalCount: data.totalCount,
-        lastCheckIn: data.lastCheckIn
-      }
-    ]
+    records.value = data.map((item) => ({
+      elderName: item.elderName,
+      elderAddress: item.elderAddress,
+      status: item.status,
+      totalCount: item.totalCount,
+      lastCheckIn: item.lastCheckIn
+    }))
   } catch (error) {
     console.error('데이터 로드 실패:', error)
     alert('데이터를 불러오는 데 실패했습니다.')
@@ -119,7 +117,13 @@ const drawChart = () => {
   })
 }
 
-watch(records, drawChart, { deep: true })
+watch(
+  records,
+  () => {
+    if (records.value.length) drawChart()
+  },
+  { deep: true }
+)
 
 // 수정 준비
 const startEditing = (index) => {
