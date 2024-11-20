@@ -9,7 +9,6 @@
         src="@/assets/video/mooluck_gif.gif"
         :class="{ 'water-mode': isWaterTime }"
         @click.stop="handleVideoClick"
-
       />
       <p class="instruction" v-if="!isWaterTime">🌱무럭이를 쓰다듬어주세요🌱</p>
       <p v-else class="water-mode-instruction">💧무럭이에게 물을 주세요💧</p>
@@ -47,7 +46,6 @@ const elderId = ref(1)
 
 // 자동 Water Time 팝업 상태
 const showWaterPopup = ref(false)
-
 
 // 오디오 클릭 이벤트
 const handleAudioClick = async () => {
@@ -156,7 +154,7 @@ onMounted(() => {
 
 /* 디폴트 커서 스타일 */
 body {
-  cursor: url('@/assets/pet_cursor.png'), pointer !important;
+  cursor: url('@/assets/pet_cursor.png'), pointer;
 }
 
 /* 전체 화면 스타일 */
