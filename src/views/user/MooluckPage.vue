@@ -1,5 +1,7 @@
 <template>
-  <div :class="['weather-container', backgroundClass]">
+  <div
+    :class="['weather-container', backgroundClass, { 'water-mode-cursor': isWaterTime }]"
+  >
     <p>현재 날씨: {{ weatherDescription }}</p>
     <div class="mooluck-container">
       <img
@@ -14,13 +16,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 
+// 날씨와 배경 설정 관련 상태값
 const weatherDescription = ref('')
 const backgroundClass = ref('')
-const elderId = ref(1) // Elder ID를 고정값으로 설정. 필요시 동적으로 가져올 수 있음.
 
+// Elder ID (고정값, 필요시 동적으로 변경 가능)
+const elderId = ref(1)
+
+// Water Time 관련 상태값
+const isWaterTime = ref(false)
+const waterStartTime = "20:46"
+const waterEndTime = "20:50"
+
+// Water Time 체크 함수
+const checkWaterTime = () => {
+  const currentTime = new Date().toTimeString().slice(0, 5) // HH:mm 형식
+  isWaterTime.value = currentTime >= waterStartTime && currentTime <= waterEndTime
+}
+
+// 날씨 정보 가져오기 함수
 const fetchWeather = async () => {
   try {
     navigator.geolocation.getCurrentPosition(
@@ -46,6 +63,7 @@ const fetchWeather = async () => {
   }
 }
 
+// 날씨 아이콘 매핑 함수
 const getWeatherDescription = (icon) => {
   const weatherMapping = {
     '01': 'Clear',
@@ -58,10 +76,11 @@ const getWeatherDescription = (icon) => {
     13: 'Snow',
     50: 'Mist'
   }
-  const code = icon.slice(0, 2) // 아이콘의 숫자만 떼어내기, fetch할 때 weather의 icon으로 가져와서 ok
+  const code = icon.slice(0, 2)
   return weatherMapping[code] || 'Default'
 }
 
+// 배경 설정 함수
 const setBackground = (icon) => {
   const code = icon.slice(0, 2)
   const dayNight = icon.endsWith('d') ? 'D' : 'N'
@@ -83,29 +102,47 @@ const setBackground = (icon) => {
 
 const handleGifClick = async () => {
   try {
-    const response = await axios.post(
-      'http://localhost:8080/interaction/pet',
-      { elderId: elderId.value },
-      {
-        headers: {
-          'Content-Type': 'application/json' // 명시적 JSON Content-Type 설정
-        }
-      }
-    )
-    alert(response.data) // API 응답 메시지를 출력
+    if (isWaterTime.value) {
+      // 물을 줄 시간 (water_count 증가)
+      const response = await axios.post(
+        'http://localhost:8080/interaction/water',
+        { elderId: elderId.value },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      alert(response.data)
+    } else {
+      // 평소 쓰다듬기 (pet_count 증가)
+      const response = await axios.post(
+        'http://localhost:8080/interaction/pet',
+        { elderId: elderId.value },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      alert(response.data)
+    }
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error)
-    alert('무럭이를 쓰다듬는 중 오류가 발생했습니다.')
+    alert('오류가 발생했습니다.')
   }
 }
 
 
+// Water Time 상태 변화 감지
+watch(isWaterTime, (newValue, oldValue) => {
+  if (newValue && !oldValue) {
+    alert('지금 물을 주는 시간이에요!') // 팝업 알림
+  }
+})
+
+// 컴포넌트 마운트 시 실행
 onMounted(() => {
   fetchWeather()
+  checkWaterTime() // 초기 Water Time 체크
+  setInterval(checkWaterTime, 1000 * 60) // 1분마다 Water Time 체크
 })
 </script>
 
 <style scoped>
+/* 전체 화면 스타일 */
 .weather-container {
   width: 100%;
   height: 100vh;
@@ -115,6 +152,34 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+/* Water Time일 때 전체 화면에서 커서 변경 */
+.weather-container.water-mode-cursor {
+  cursor: url("@/assets/water_cursor.png"), pointer;
+}
+
+/* 비디오 스타일 */
+.interactive-video {
+  width: 400px;
+  border: none;
+}
+
+/* Water Time일 때 비디오 위 커서 변경 */
+.interactive-video.water-mode {
+  cursor: url("@/assets/water_cursor.png"), pointer;
+}
+
+/* 텍스트 스타일 */
+.water-mode-instruction {
+  color: blue;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.instruction {
+  color: black;
+  margin-top: 10px;
 }
 
 /* 모든 날씨 배경화면 - 낮밤 구분 */
@@ -141,7 +206,7 @@ onMounted(() => {
   background-size: cover;
 }
 .brokenCloudsN {
-  background: url('@/assets/image/cloudsD_sample.webp') no-repeat center center;
+  background: url("@/assets/image/sample_made.png") no-repeat center center;
   background-size: cover;
 }
 .rainD {
@@ -169,31 +234,7 @@ onMounted(() => {
   background-size: cover;
 }
 .default {
-  background-color: white;
-}
-
-.mooluck-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.interactive-video {
-  width: 400px;
-  border: none;
-  box-shadow: none;
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-  background: transparent;
-}
-
-.instruction {
-  margin-top: 10px;
-  font-size: 1.2rem;
-  color: #333;
-  text-align: center;
+  background: url("@/assets/image/clearD.webp") no-repeat center center;
+  background-size: cover;
 }
 </style>
