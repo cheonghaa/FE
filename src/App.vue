@@ -69,7 +69,7 @@ const footerColor = computed(() => {
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100%;
   background-color: #fff8f0;
   color: #5a5a5a;
   font-family: 'Arial', sans-serif;
@@ -77,9 +77,15 @@ const footerColor = computed(() => {
   padding: 0;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .header {
   text-align: center;
-  padding: 1rem;
+  padding: 0;
   border-bottom: 2px solid #ffcc80;
   margin: 0;
 }
@@ -89,18 +95,20 @@ const footerColor = computed(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: -1;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0;
+  /* margin: 0; */
 }
 
 .background-image {
   width: auto;
   height: auto;
-  max-width: 800px;
-  max-height: 600px;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: none;
 }
 
@@ -109,7 +117,7 @@ const footerColor = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 0;
   position: relative;
   z-index: 1;
   backdrop-filter: blur(15px);
@@ -134,7 +142,7 @@ nav a:hover {
 .footer {
   color: #5d4037;
   text-align: center;
-  padding: 1rem;
+  padding: 0;
   border-top: 2px solid #ffcc80;
   font-size: 0.9rem;
 }

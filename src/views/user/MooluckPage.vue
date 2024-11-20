@@ -3,15 +3,9 @@
     <div class="mooluck-container">
       <img
         class="interactive-gif"
-        src="@/assets/video/mooluck123.gif"
+        src="@/assets/video/mooluck_gif.gif"
         alt="무럭이 GIF"
         @click="handleGifClick"
-      />
-      <p class="instruction">무럭이를 쓰다듬어주세요!</p>
-        class="interactive-video"
-        src="@/assets/video/mooluck_gif.gif"
-        :class="{ 'water-mode': isWaterTime }"
-        @click="handleVideoClick"
       />
       <p class="instruction" v-if="!isWaterTime">🌱저를 쓰다듬어주세요🌱</p>
       <p v-else class="water-mode-instruction">💧지금 저에게 물을 주세요💧</p>
@@ -34,7 +28,6 @@ import axios from 'axios'
 
 // Elder ID 설정
 const elderId = 1
-
 
 // 비디오 클릭 이벤트
 const handleVideoClick = async () => {
