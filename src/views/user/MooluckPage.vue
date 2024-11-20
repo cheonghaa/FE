@@ -29,6 +29,7 @@ import axios from 'axios'
 // Elder ID 설정
 const elderId = 1
 
+
 // 비디오 클릭 이벤트
 const handleVideoClick = async () => {
   let isPopupShown = false // 첫 번째 팝업 표시 여부를 확인하는 변수

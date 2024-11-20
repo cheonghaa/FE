@@ -5,13 +5,14 @@
 
     <!-- 차트 영역 -->
     <div class="chart-container">
-      <canvas id="interactionChart"></canvas>
+      <canvas id="interactionBarChart"></canvas>
     </div>
 
     <!-- 테이블 영역 -->
     <table class="data-table">
       <thead>
         <tr>
+          <th>ID</th>
           <th>이름</th>
           <th>주소</th>
           <th>상태</th>
@@ -21,7 +22,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(record, index) in records" :key="index">
+        <tr v-for="(record, index) in records" :key="record.elderId" @click="rowClickHandler(index)">
+          <td>
+            <input v-if="editIndex === index" v-model="record.elderId" />
+            <span v-else>{{ record.elderId }}</span>
+          </td>
           <td>
             <input v-if="editIndex === index" v-model="record.elderName" />
             <span v-else>{{ record.elderName }}</span>
@@ -63,8 +68,10 @@ import { useRouter } from 'vue-router'
 
 const records = ref([])
 const editIndex = ref(null)
-let chart = null
+let barChart = null
+// let chart = null
 const router = useRouter()
+const chartContainer = 'interactionBarChart'
 
 // API 데이터 불러오기
 const fetchData = async (staffId) => {
@@ -72,11 +79,16 @@ const fetchData = async (staffId) => {
     const response = await axios.get(`http://localhost:8080/admin/table?staffId=${staffId}`)
     const data = response.data.response.data
     records.value = data.map((item) => ({
+      elderId: item.elderId, // elderId 추가
       elderName: item.elderName,
       elderAddress: item.elderAddress,
       status: item.status,
       totalCount: item.totalCount,
-      lastCheckIn: item.lastCheckIn
+      lastCheckIn: item.lastCheckIn,
+      firstInterval: item.firstInterval,
+      secondInterval: item.secondInterval,
+      thirdInterval: item.thirdInterval,
+      fourthInterval: item.fourthInterval
     }))
   } catch (error) {
     console.error('데이터 로드 실패:', error)
@@ -85,20 +97,23 @@ const fetchData = async (staffId) => {
 }
 
 // 차트 그리기
-const drawChart = () => {
-  const ctx = document.getElementById('interactionChart').getContext('2d')
-  if (chart) chart.destroy()
+const drawBarChart = () => {
+  const ctx = document.getElementById('interactionBarChart').getContext('2d')
+  if (barChart) barChart.destroy()
 
-  chart = new Chart(ctx, {
-    type: 'line',
+  const labels = records.value.map((record) => `Elder ID ${record.elderId}`)
+  const data = records.value.map((record) => record.totalCount)
+  const backgroundColors = data.map((value) => (value === 0 ? 'red' : 'blue'))
+
+  barChart = new Chart(ctx, {
+    type: 'bar',
     data: {
-      labels: records.value.map((record) => record.lastCheckIn),
+      labels: labels,
       datasets: [
         {
           label: '총 상호작용 횟수',
-          data: records.value.map((record) => record.totalCount),
-          borderColor: 'blue',
-          fill: false
+          data: data,
+          backgroundColor: backgroundColors
         }
       ]
     },
@@ -106,7 +121,7 @@ const drawChart = () => {
       responsive: true,
       scales: {
         x: {
-          title: { display: true, text: '마지막 체크인 시간' }
+          title: { display: true, text: 'Elder ID' }
         },
         y: {
           title: { display: true, text: '상호작용 횟수' },
@@ -117,10 +132,57 @@ const drawChart = () => {
   })
 }
 
+// Row 클릭 이벤트
+const rowClickHandler = (index) => {
+if (index >= 0 && index < records.value.length) {
+    const record = records.value[index]
+    console.log(`Row clicked: ${record.elderId}`) // 디버그용 로그 추가
+    const ctx = document.getElementById(chartContainer).getContext('2d')
+
+    if (barChart) barChart.destroy()
+
+    barChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['0시', '6시', '12시', '18시', '24시'],
+        datasets: [
+          {
+            label: `Elder ID ${record.elderId} Interaction Intervals`,
+            data: [
+              record.firstInterval,
+              record.secondInterval,
+              record.thirdInterval,
+              record.fourthInterval,
+              0
+            ],
+            borderColor: 'blue',
+            tension: 0.4,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            title: { display: true, text: '시간' }
+          },
+          y: {
+            title: { display: true, text: '상호작용 횟수' },
+            beginAtZero: true
+          }
+        }
+      }
+    })
+  } else {
+    console.error(`Invalid row index: ${index}`)
+  }
+}
+
 watch(
   records,
   () => {
-    if (records.value.length) drawChart()
+    if (records.value.length) drawBarChart()
   },
   { deep: true }
 )
@@ -134,12 +196,14 @@ const startEditing = (index) => {
 const updateRecord = (index) => {
   records.value[index].lastCheckIn = new Date().toLocaleString()
   editIndex.value = null
+  drawBarChart() // 데이터 업데이트 후 차트도 갱신
 }
 
 // 삭제(Delete) 기능
 const deleteRecord = (index) => {
   records.value.splice(index, 1)
   editIndex.value = null
+  drawBarChart() // 데이터 삭제 후 차트도 갱신
 }
 
 // 로그아웃
