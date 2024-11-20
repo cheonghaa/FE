@@ -2,11 +2,11 @@
   <div class="container">
     <!-- 배경 GIF -->
     <div class="background">
-      <img src="@/assets/images/garden.gif" alt="배경 GIF" class="background-gif" />
+      <img src="@/assets/images/green.gif" alt="배경 GIF" class="background-gif" />
     </div>
     <!-- 로그인 폼 -->
     <div class="content">
-      <h1 class="title" @click="goToHome">Mooluck</h1>
+      <h1 class="title" @click="goToHome">Admin</h1>
       <div class="form">
         <div class="form-group">
           <label for="email">이메일</label>
@@ -15,7 +15,7 @@
             type="email"
             id="email"
             class="input"
-            placeholder="이메일 입력"
+            placeholder="이메일을 입력해주세요."
             required
           />
         </div>
@@ -26,12 +26,12 @@
             type="password"
             id="password"
             class="input"
-            placeholder="비밀번호 입력"
+            placeholder="비밀번호를 입력해주세요."
             required
           />
         </div>
         <button @click="login" class="submit-button">로그인</button>
-        <button @click="goToSignUp" class="signup-button">회원가입</button>
+        <button @click="goToSignUp" class="signup-button">신규 담당자 등록</button>
       </div>
     </div>
     <!-- 뒤로가기 버튼 -->

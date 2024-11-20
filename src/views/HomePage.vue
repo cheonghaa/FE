@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="background">
-      <img src="@/assets/images/seed.gif" alt="배경" class="background-image" />
+      <img src="@/assets/images/orange.gif" alt="배경" class="background-image" />
     </div>
     <div class="content">
       <h1 class="title">Mooluck</h1>
@@ -12,7 +12,7 @@
             type="text"
             id="id"
             class="input"
-            placeholder="아이디 입력"
+            placeholder="아이디를 입력해주세요"
             v-model="elderAccount"
           />
         </div>
@@ -22,27 +22,31 @@
             type="password"
             id="password"
             class="input"
-            placeholder="비밀번호 입력"
+            placeholder="비밀번호를 입력해주세요"
             v-model="elderPwd"
           />
         </div>
         <button class="submit-button" @click="handleLogin">확인</button>
       </div>
       <div v-if="authStore.error" class="error-message">{{ authStore.error }}</div>
-      <div v-if="authStore.isLoggedIn" class="success-message">
-        로그인 성공! 사용자 ID: {{ authStore.userId }}
-      </div>
+      <div v-if="authStore.isLoggedIn" class="success-message"></div>
     </div>
     <div class="admin-login">
       <router-link to="/login">
         <button class="admin-button">관리자</button>
       </router-link>
     </div>
+
+    <!-- 커스텀 팝업 창 -->
+    <div v-if="showPopup" :class="['popup', popupType]">
+      <p>{{ popupMessage }}</p>
+      <button @click="showPopup = false" class="popup-close">닫기</button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useAuthStore } from '../stores/authStore'
 import { useRouter } from 'vue-router'
 
@@ -52,20 +56,36 @@ const authStore = useAuthStore()
 const elderAccount = ref('')
 const elderPwd = ref('')
 
+const handleLoginSuccess = inject('handleLoginSuccess') // 최상위에서 제공받은 함수
+
+const showPopup = ref(false)
+const popupMessage = ref('')
+const popupType = ref('') // 'success', 'error' 또는 'warning'
+
 async function handleLogin() {
   console.log('아이디:', elderAccount.value)
   console.log('비밀번호:', elderPwd.value)
 
   if (!elderAccount.value || !elderPwd.value) {
-    alert('아이디와 비밀번호를 입력해주세요.')
+    popupMessage.value = '⚠️ 아이디와 비밀번호를 모두 입력해 주세요!\n\n무럭이가 기다리고 있어요 😊'
+    popupType.value = 'warning'
+    showPopup.value = true
     return
   }
 
   await authStore.login(elderAccount.value.trim(), elderPwd.value.trim())
 
   if (authStore.isLoggedIn) {
-    alert('로그인 성공!')
+    popupMessage.value = '🎉 로그인 성공!\n\n환영해요! 무럭이가 반겨줄 준비가 되었어요 🌱'
+    popupType.value = 'success'
+    showPopup.value = true
+    handleLoginSuccess()
     router.push({ name: 'mooluck' })
+  } else {
+    popupMessage.value =
+      '❌ 로그인 실패!\n\n아이디 또는 비밀번호가 맞지 않아요. 다시 시도해 주세요 🌼'
+    popupType.value = 'error'
+    showPopup.value = true
   }
 }
 </script>
@@ -81,6 +101,8 @@ async function handleLogin() {
   align-items: center;
   justify-content: center;
   font-family: 'Roboto', Arial, sans-serif;
+  margin: 0; /* 공백 제거 */
+  padding: 0; /* 공백 제거 */
 }
 
 /* 배경 이미지 */
@@ -159,7 +181,6 @@ label {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.7);
 }
 
-/* 버튼 스타일 */
 .submit-button {
   width: 100%;
   height: 45px;
@@ -169,15 +190,15 @@ label {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #007bff;
+  background-color: #e8b05c; /* 중간 톤의 부드러운 주황색 */
   transition:
     background-color 0.3s ease,
     box-shadow 0.3s ease;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
-  box-shadow: 0 3px 10px rgba(0, 123, 255, 0.5);
+  background-color: #f7b35f; /* 중간 톤보다 약간 진한 주황색 */
+  box-shadow: 0 3px 10px rgba(255, 167, 38, 0.5); /* 부드러운 주황빛 그림자 */
 }
 
 /* 에러 및 성공 메시지 */
@@ -193,20 +214,20 @@ label {
 
 /* 관리자 버튼 */
 .admin-login {
-  position: fixed; /* 스크롤 시에도 고정 */
-  bottom: 20px;
-  right: 20px;
+  position: absolute; /* 컨테이너 안에 고정 */
+  bottom: 30px; /* 하단 여백 조정 */
+  right: 30px; /* 오른쪽 여백 조정 */
   z-index: 10;
 }
 
 .admin-button {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border: none;
   border-radius: 50%;
   font-size: 0.9rem;
   font-weight: bold;
-  background-color: #f39c12;
+  background-color: #294c66;
   color: white;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -217,9 +238,9 @@ label {
 }
 
 .admin-button:hover {
-  background-color: #e67e22;
-  transform: scale(1.1); /* 호버 시 확대 */
-  box-shadow: 0 6px 12px rgba(243, 156, 18, 0.5);
+  background-color: #3a5a80; /* 약간 밝은 블루로 호버 효과 */
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(58, 90, 128, 0.5);
 }
 
 /* 반응형 디자인 */
@@ -234,5 +255,58 @@ label {
     bottom: 15px;
     right: 15px;
   }
+}
+
+/* 팝업 스타일 */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.5rem;
+  border-radius: 15px;
+  background-color: #fff3e0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  text-align: center;
+  font-size: 1rem;
+  color: #5d4037;
+  max-width: 300px;
+  width: 90%; /* 모바일에서 화면 크기에 맞추기 위해 90%로 설정 */
+  max-width: 300px; /* 데스크탑에서는 300px 고정 */
+}
+
+/* 팝업 내용 */
+.popup p {
+  margin-bottom: 1rem;
+  white-space: pre-wrap; /* 줄바꿈을 유지 */
+}
+
+/* 팝업 닫기 버튼 */
+.popup-close {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffcc80;
+  color: #5d4037;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.popup-close:hover {
+  background-color: #ffb74d;
+}
+
+/* 팝업 유형에 따른 스타일 */
+.popup.success {
+  border: 2px solid #4caf50;
+}
+
+.popup.error {
+  border: 2px solid #ff5252;
+}
+
+.popup.warning {
+  border: 2px solid #ffb74d;
 }
 </style>
