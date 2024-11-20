@@ -3,6 +3,13 @@
     <h1>Mooluck</h1>
     <div>담당 독거노인 현황입니다.</div>
 
+    <!-- 우상단 아이콘 버튼 -->
+    <div class="button-container">
+      <button class="btn btn-outline-secondary icon-button" @click="openSettings">
+        <i class="bi bi-gear"></i>
+      </button>
+    </div>
+
     <!-- 차트 영역 -->
     <div class="chart-container">
       <canvas id="interactionBarChart"></canvas>
@@ -23,7 +30,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(record, index) in records" :key="record.elderId" @click="rowClickHandler(index)">
+        <tr
+          v-for="(record, index) in records"
+          :key="record.elderId"
+          @click="rowClickHandler(index)"
+        >
           <td>
             <input v-if="editIndex === index" v-model="record.elderId" />
             <span v-else>{{ record.elderId }}</span>
@@ -60,10 +71,9 @@
         </tr>
       </tbody>
     </table>
+    <button @click="fetchData(1)">데이터 불러오기</button>
+    <button @click="logout">로그아웃</button>
   </div>
-
-  <button @click="fetchData(1)">데이터 불러오기</button>
-  <button @click="logout">로그아웃</button>
 </template>
 
 <script setup>
@@ -141,7 +151,7 @@ const drawBarChart = () => {
 
 // Row 클릭 이벤트
 const rowClickHandler = (index) => {
-if (index >= 0 && index < records.value.length) {
+  if (index >= 0 && index < records.value.length) {
     const record = records.value[index]
     console.log(`Row clicked: ${record.elderId}`) // 디버그용 로그 추가
     const ctx = document.getElementById(chartContainer).getContext('2d')
@@ -223,6 +233,12 @@ onMounted(() => fetchData(1)) // 기본 ID로 데이터 로드
 </script>
 
 <style scoped>
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css');
+
+.icon-button {
+  font-size: 20px;
+}
+
 .chart-container {
   width: 800px;
   height: 400px;
@@ -245,5 +261,12 @@ td {
 
 thead {
   background-color: #f2f2f2;
+}
+
+/* 우상단 아이콘 버튼 스타일 */
+.button-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 </style>
