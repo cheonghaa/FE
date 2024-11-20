@@ -23,6 +23,10 @@ export default defineConfig({
         target: 'http://localhost:8080', // API 요청 처리
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '') // /api를 제거하고 백엔드로 전달
+      },
+      '/ai': {
+        target: 'http://localhost:5050', // API 요청 처리
+        changeOrigin: true
       }
     }
   }
