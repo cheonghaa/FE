@@ -2,9 +2,12 @@
   <div :class="['weather-container', backgroundClass]">
     <p>현재 날씨: {{ weatherDescription }}</p>
     <div class="mooluck-container">
-      <video class="interactive-video" autoplay muted loop playsinline @click="handleVideoClick">
-        <source src="@/assets/video/mooluck_noBackground.mp4" type="video/mp4" />
-      </video>
+      <img
+        class="interactive-gif"
+        src="@/assets/video/mooluck123.gif"
+        alt="무럭이 GIF"
+        @click="handleGifClick"
+      />
       <p class="instruction">무럭이를 쓰다듬어주세요!</p>
     </div>
   </div>
@@ -23,12 +26,12 @@ const fetchWeather = async () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords
-        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
 
         const response = await axios.get(
           `http://localhost:8080/api/weather?lat=${latitude}&lon=${longitude}`
         )
-        console.log("API 응답 데이터:", response.data);
+        console.log('API 응답 데이터:', response.data)
 
         const weatherIcon = response.data.response.data.weatherIcon // API에서 반환한 weatherIcon
         weatherDescription.value = getWeatherDescription(weatherIcon)
@@ -50,10 +53,10 @@ const getWeatherDescription = (icon) => {
     '03': 'Clouds',
     '04': 'Broken Clouds',
     '09': 'Rain',
-    '10': 'Rain',
-    '11': 'Rain',
-    '13': 'Snow',
-    '50': 'Mist',
+    10: 'Rain',
+    11: 'Rain',
+    13: 'Snow',
+    50: 'Mist'
   }
   const code = icon.slice(0, 2) // 아이콘의 숫자만 떼어내기, fetch할 때 weather의 icon으로 가져와서 ok
   return weatherMapping[code] || 'Default'
@@ -63,22 +66,22 @@ const setBackground = (icon) => {
   const code = icon.slice(0, 2)
   const dayNight = icon.endsWith('d') ? 'D' : 'N'
   const backgroundMapping = {
-      "01": `clear${dayNight}`,
-      "02": `clouds${dayNight}`,
-      "03": `clouds${dayNight}`,
-      "04": `brokenClouds${dayNight}`,
-      "09": `rain${dayNight}`,
-      "10": `rain${dayNight}`,
-      "11": `rain${dayNight}`,
-      "13": `snow${dayNight}`,
-      "50": `mist${dayNight}`,
+    '01': `clear${dayNight}`,
+    '02': `clouds${dayNight}`,
+    '03': `clouds${dayNight}`,
+    '04': `brokenClouds${dayNight}`,
+    '09': `rain${dayNight}`,
+    10: `rain${dayNight}`,
+    11: `rain${dayNight}`,
+    13: `snow${dayNight}`,
+    50: `mist${dayNight}`
   }
-  const newBackgroundClass = backgroundMapping[code] || 'default';
-  console.log("backgroundClass set to:", newBackgroundClass);
-  backgroundClass.value = backgroundMapping[code] || 'default';
+  const newBackgroundClass = backgroundMapping[code] || 'default'
+  console.log('backgroundClass set to:', newBackgroundClass)
+  backgroundClass.value = backgroundMapping[code] || 'default'
 }
 
-const handleVideoClick = async () => {
+const handleGifClick = async () => {
   try {
     const response = await axios.post(
       'http://localhost:8080/interaction/pet',
@@ -95,6 +98,7 @@ const handleVideoClick = async () => {
     alert('무럭이를 쓰다듬는 중 오류가 발생했습니다.')
   }
 }
+
 
 onMounted(() => {
   fetchWeather()
@@ -117,51 +121,51 @@ onMounted(() => {
 /* 전체 사진 임시 설정 */
 /* cloudsN, brokenCloudsD, brokenCloudsN, rainN, snowN, mistN 사진 임의로 */
 .clearD {
-  background: url("@/assets/image/clearD_sample.webp") no-repeat center center;
+  background: url('@/assets/image/clearD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .clearN {
-  background: url("@/assets/image/clearN_sample.webp") no-repeat center center;
+  background: url('@/assets/image/clearN_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .cloudsD {
-  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background: url('@/assets/image/cloudsD_sample.webp') no-repeat center center;
   background-size: cover;
 }
-.cloudsN { 
-  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+.cloudsN {
+  background: url('@/assets/image/cloudsD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .brokenCloudsD {
-  background: url("@/assets/image/cloudsD_sample.webp") no-repeat center center;
+  background: url('@/assets/image/cloudsD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .brokenCloudsN {
-  background: url("@/assets/image/cloudsN_sample.webp") no-repeat center center;
+  background: url('@/assets/image/cloudsD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .rainD {
-  background: url("@/assets/image/rainD_sample.webp") no-repeat center center;
+  background: url('@/assets/image/rainD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .rainN {
-  background: url("@/assets/image/rainD_sample.webp") no-repeat center center;
+  background: url('@/assets/image/rainD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .snowD {
-  background: url("@/assets/image/snowD_sample.webp") no-repeat center center;
+  background: url('@/assets/image/snowD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .snowN {
-  background: url("@/assets/image/snowD_sample.jpeg") no-repeat center center;
+  background: url('@/assets/image/snowD_sample.jpeg') no-repeat center center;
   background-size: cover;
 }
 .mistD {
-  background: url("@/assets/image/mistD_sample.jpeg") no-repeat center center;
+  background: url('@/assets/image/mistD_sample.jpeg') no-repeat center center;
   background-size: cover;
 }
 .mistN {
-  background: url("@/assets/image/mistD_sample.webp") no-repeat center center;
+  background: url('@/assets/image/mistD_sample.webp') no-repeat center center;
   background-size: cover;
 }
 .default {
