@@ -41,19 +41,19 @@ const footerColor = computed(() => {
 
 <template>
   <div class="app-container">
-    <header :style="{ backgroundColor: headerColor }" class="header">
+    <!-- <header :style="{ backgroundColor: headerColor }" class="header">
       <h1 class="title">{{ pageTitle }}</h1>
       <nav v-if="!isAdminPage">
-        <!-- 관리자 페이지에서는 네비게이션 바 숨김 -->
+       
         <a v-if="!isLoggedIn" href="/">홈</a>
         <a href="/interaction">사용설명서</a>
       </nav>
-    </header>
+    </header> -->
 
-    <div class="background" v-if="!isAdminPage">
-      <!-- 관리자 페이지에서는 배경 숨김 -->
+    <!-- <div class="background" v-if="!isAdminPage">
+    
       <img src="@/assets/images/orange.gif" alt="배경" class="background-image" />
-    </div>
+    </div> -->
 
     <main class="content">
       <RouterView />
@@ -77,38 +77,28 @@ const footerColor = computed(() => {
   padding: 0;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-.header {
+/* .header {
   text-align: center;
-  padding: 0;
+  padding: 1rem;
   border-bottom: 2px solid #ffcc80;
   margin: 0;
-}
+} */
 
-.background {
+/* .background {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vh;
   height: 100%;
   z-index: -1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
-  /* margin: 0; */
-}
+} */
 
 .background-image {
   width: auto;
   height: auto;
-  max-width: 100%;
-  max-height: 100%;
   object-fit: none;
 }
 
@@ -117,7 +107,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
+  padding: 0rem;
   position: relative;
   z-index: 1;
   backdrop-filter: blur(15px);
@@ -142,8 +132,10 @@ nav a:hover {
 .footer {
   color: #5d4037;
   text-align: center;
-  padding: 0;
-  border-top: 2px solid #ffcc80;
+  padding: 1rem;
+  border-top: 1px solid #ffcc80;
   font-size: 0.9rem;
+  bottom: auto;
+
 }
 </style>
