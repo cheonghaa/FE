@@ -1,4 +1,3 @@
-// src/managers/PopupManager.js
 import { ref } from 'vue'
 
 export const showPopup = ref(false)
@@ -8,6 +7,10 @@ export const popupMessage = ref('')
 export const openPopup = (message) => {
   popupMessage.value = message
   showPopup.value = true
+  // 5초 후 자동으로 팝업 닫기
+  setTimeout(() => {
+    showPopup.value = false
+  }, 5000)
 }
 
 // 팝업 닫기 함수

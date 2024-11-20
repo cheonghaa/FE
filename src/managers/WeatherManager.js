@@ -14,8 +14,10 @@ export const fetchWeather = async () => {
         const response = await axios.get(
           `http://localhost:8080/api/weather?lat=${latitude}&lon=${longitude}`
         )
+        console.log('위도 :' + latitude + ' / 경도 :' + longitude)
         const weatherIcon = response.data.response.data.weatherIcon
         weatherDescription.value = getWeatherDescription(weatherIcon)
+        console.log('현재 거주지 날씨 : ' + weatherDescription.value)
         setBackground(weatherIcon)
       },
       (error) => console.error('위치 권한 거부:', error.message)
