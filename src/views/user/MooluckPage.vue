@@ -5,21 +5,33 @@
   >
     <div class="mooluck-container">
       <img
-        class="interactive-gif"
+        class="interactive-video"
         src="@/assets/video/mooluck_gif.gif"
         :class="{ 'water-mode': isWaterTime }"
+        @mouseover="setHover(true)"
+        @mouseleave="setHover(false)"
         @click.stop="handleVideoClick"
       />
       <p class="instruction" v-if="!isWaterTime">🌱무럭이를 쓰다듬어주세요🌱</p>
       <p v-else class="water-mode-instruction">💧무럭이에게 물을 주세요💧</p>
-      <p>
-        <button @click="handleAudioClick" class="cute-button">🎙️ 저와 함께 이야기해요 🎙️</button>
-      </p>
     </div>
 
-    <!-- 일반 팝업 -->
-    <div v-if="showPopup" class="popup" @click="closePopup">
-      <p>{{ popupMessage }}</p>
+    <div class="chat-container">
+      <p>
+        <button @click="startChat" class="chat-button">
+          🎙️ 무럭이와 함께 대화해요! 저를 눌러주세요! 🎙️
+        </button>
+      </p>
+      <div class="mooluck-chat">
+        <div class="chat-box">
+          <img src="@/assets/chatbot.png" alt="Chatbot" class="chat-bg" />
+          <div class="chat-content">
+            <p v-for="(message, index) in chatMessages" :key="index">
+              {{ message }}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 자동 Water Time 팝업 -->
@@ -30,39 +42,64 @@
         지금 바로 무럭이에게 물을 주세요
       </p>
     </div>
+    <div v-if="showPopup" class="popup">
+      {{ popupMessage }}
+    </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { isWaterTime, checkWaterTime, startWaterTimeInterval } from '@/managers/WaterTimeManager'
-import { showPopup, popupMessage, openPopup, closePopup } from '@/managers/PopupManager'
+import { showPopup, popupMessage, openPopup } from '@/managers/PopupManager'
 import { fetchWeather, backgroundClass } from '@/managers/WeatherManager'
 import axios from 'axios'
 
 // Elder ID 설정
-
 const elderId = ref(1)
 
 // 자동 Water Time 팝업 상태
 const showWaterPopup = ref(false)
 
-// 오디오 클릭 이벤트
-const handleAudioClick = async () => {
+const chatMessages = ref([])
+
+const isHovering = ref(false)
+
+const setHover = (hover) => {
+  isHovering.value = hover
+  if (hover) {
+    const cursorUrl = new URL('@/assets/pet_cursor.png', import.meta.url).href
+    document.body.style.cursor = `url(${cursorUrl}), pointer`
+  } else {
+    document.body.style.cursor = 'default' // 기본 커서로 복원
+  }
+}
+
+// 실시간 STT-TTS 대화 시작
+const startChat = async () => {
   try {
     const response = await axios.post(
       'http://localhost:5050/interaction/pet',
-      { elderId },
+      {},
       {
         headers: {
           'Content-Type': 'application/json'
         }
       }
     )
+    // 응답 데이터에서 stt_text와 tts_text 추출
+    const { stt_text, tts_text } = response.data
+
     console.log('오디오 응답:', response.data)
+
+    chatMessages.value.push(`문희: ${stt_text}`)
+    chatMessages.value.push(`무럭이: ${tts_text}`)
+
     openPopup(response.data.message)
   } catch (error) {
-    console.error('오디오 호출 중 오류 발생:', error)
+    console.error('대화 중 오류 발생:', error)
+
+    chatMessages.value.push('무럭이와 대화에 실패했어요 😭')
     openPopup('오류가 발생했어요. 다시 시도해 주세요. 😭')
   }
 }
@@ -86,6 +123,7 @@ const handleVideoClick = async () => {
         { headers: { 'Content-Type': 'application/json' } }
       )
       console.log('쓰다듬기 응답:', response.data)
+
       openPopup('무럭이를 쓰다듬었어요✨ 무럭이가 행복해하고 있어요💚')
     }
   } catch (error) {
@@ -115,14 +153,51 @@ onMounted(() => {
   fetchWeather()
   checkWaterTime()
   startWaterTimeInterval() // 주기적으로 Water Time 체크
-
-  const cursorUrl = new URL('@/assets/pet_cursor.png', import.meta.url).href
-  document.body.style.cursor = `url(${cursorUrl}), pointer`
 })
 </script>
 
 <style scoped>
-.cute-button {
+/* 챗봇 */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.chat-box {
+  position: relative; /* 자식 요소를 기준으로 겹치도록 설정 */
+}
+
+.chat-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 박스에 꽉 차게 */
+  border-radius: 15px;
+  z-index: 1; /* 이미지 레이어 */
+}
+
+.chat-content {
+  position: absolute; /* 부모 요소인 .chat-box 기준으로 절대 위치 */
+  top: 0; /* 이미지 상단에 배치 */
+  left: 0; /* 이미지 왼쪽에 배치 */
+  width: 100%; /* 이미지 너비에 맞게 */
+  height: 100%; /* 이미지 높이에 맞게 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 텍스트를 가운데 정렬 */
+  align-items: center; /* 텍스트를 수평 가운데 정렬 */
+  padding: 10px;
+  color: black; /* 텍스트 색상 */
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  z-index: 2; /* 이미지 위에 배치 */
+  background: rgba(0, 0, 0, 0); /* 반투명 배경 추가 */
+  border-radius: 15px; /* 이미지와 동일한 모서리 둥글기 */
+}
+
+.chat-button {
   background-color: #ffecb3; /* 밝고 부드러운 노란색 */
   color: #ff7043; /* 따뜻한 오렌지색 */
   font-family: 'Comic Sans MS', 'Arial', sans-serif; /* 귀여운 글씨체 */
@@ -139,14 +214,14 @@ onMounted(() => {
 }
 
 /* 호버 효과 */
-.cute-button:hover {
+.chat-button:hover {
   background-color: #ffe0b2; /* 약간 밝아지는 색상 */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 더 깊어진 그림자 */
   transform: translateY(-2px); /* 버튼이 살짝 떠오르는 효과 */
 }
 
 /* 클릭 효과 */
-.cute-button:active {
+.chat-button:active {
   background-color: #ffcc80; /* 약간 어두운 색상 */
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* 그림자 축소 */
   transform: translateY(1px); /* 클릭 시 버튼이 눌리는 효과 */
@@ -154,7 +229,7 @@ onMounted(() => {
 
 /* 디폴트 커서 스타일 */
 body {
-  cursor: url('@/assets/pet_cursor.png'), pointer;
+  cursor: url('@/assets/pet_cursor.png'), pointer !important;
 }
 
 /* 전체 화면 스타일 */

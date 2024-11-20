@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 
 export const isWaterTime = ref(false)
-const waterStartTime = '23:52'
-const waterEndTime = '23:53'
+const waterStartTime = '4:34'
+const waterEndTime = '4:35'
 
 // 현재 Water Time 상태를 체크하는 함수
 export const checkWaterTime = () => {
