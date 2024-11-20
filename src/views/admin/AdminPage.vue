@@ -15,6 +15,7 @@
           <th>ID</th>
           <th>이름</th>
           <th>주소</th>
+          <th>전화번호</th>
           <th>상태</th>
           <th>상호작용 횟수</th>
           <th>마지막 체크인</th>
@@ -35,6 +36,11 @@
             <input v-if="editIndex === index" v-model="record.elderAddress" />
             <span v-else>{{ record.elderAddress }}</span>
           </td>
+          <td>
+            <input v-if="editIndex === index" v-model="record.elderNumber" />
+            <span v-else>{{ record.elderNumber }}</span>
+          </td>
+
           <td>
             <input v-if="editIndex === index" v-model="record.status" />
             <span v-else>{{ record.status }}</span>
@@ -82,6 +88,7 @@ const fetchData = async (staffId) => {
       elderId: item.elderId, // elderId 추가
       elderName: item.elderName,
       elderAddress: item.elderAddress,
+      elderNumber: item.elderNumber,
       status: item.status,
       totalCount: item.totalCount,
       lastCheckIn: item.lastCheckIn,
