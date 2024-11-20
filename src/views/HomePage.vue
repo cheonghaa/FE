@@ -118,7 +118,7 @@ async function handleLogin() {
 .background-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: auto;
   opacity: 0.8;
   filter: blur(3px);
 }
@@ -272,8 +272,8 @@ label {
   font-size: 1rem;
   color: #5d4037;
   max-width: 300px;
-  width: 90%; /* 모바일에서 화면 크기에 맞추기 위해 90%로 설정 */
-  max-width: 300px; /* 데스크탑에서는 300px 고정 */
+  width: 90%;
+  max-width: 300px;
 }
 
 /* 팝업 내용 */

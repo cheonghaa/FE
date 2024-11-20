@@ -5,10 +5,11 @@
   >
     <div class="mooluck-container">
       <img
-        class="interactive-video"
+        class="interactive-gif"
         src="@/assets/video/mooluck_gif.gif"
         :class="{ 'water-mode': isWaterTime }"
         @click.stop="handleVideoClick"
+
       />
       <p class="instruction" v-if="!isWaterTime">🌱무럭이를 쓰다듬어주세요🌱</p>
       <p v-else class="water-mode-instruction">💧무럭이에게 물을 주세요💧</p>
@@ -41,10 +42,12 @@ import { fetchWeather, backgroundClass } from '@/managers/WeatherManager'
 import axios from 'axios'
 
 // Elder ID 설정
+
 const elderId = ref(1)
 
 // 자동 Water Time 팝업 상태
 const showWaterPopup = ref(false)
+
 
 // 오디오 클릭 이벤트
 const handleAudioClick = async () => {
