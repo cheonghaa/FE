@@ -29,8 +29,8 @@ const elderId = ref(1)
 
 // Water Time 관련 상태값
 const isWaterTime = ref(false)
-const waterStartTime = "20:46"
-const waterEndTime = "20:50"
+const waterStartTime = "22:02"
+const waterEndTime = "22:50"
 
 // Water Time 체크 함수
 const checkWaterTime = () => {
