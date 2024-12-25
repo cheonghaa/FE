@@ -1,51 +1,9 @@
 <template>
-  <div
-    :class="['weather-container', backgroundClass, { 'water-mode-cursor': isWaterTime }]"
-    @click="closeWaterPopup"
-  >
-    <div class="mooluck-container">
-      <img
-        class="interactive-video"
-        src="@/assets/video/mooluck_gif.gif"
-        :class="{ 'water-mode': isWaterTime }"
-        @mouseover="setHover(true)"
-        @mouseleave="setHover(false)"
-        @click.stop="handleVideoClick"
-      />
-      <p class="instruction" v-if="!isWaterTime">🌱무럭이를 쓰다듬어주세요🌱</p>
-      <p v-else class="water-mode-instruction">💧무럭이에게 물을 주세요💧</p>
-    </div>
-
-    <div class="chat-container">
-      <p>
-        <button @click="startChat" class="chat-button">
-          🎙️ 무럭이와 함께 대화해요! 저를 눌러주세요! 🎙️
-        </button>
-      </p>
-      <div class="mooluck-chat">
-        <div class="chat-box">
-          <img src="@/assets/chatbot.png" alt="Chatbot" class="chat-bg" />
-          <div class="chat-content">
-            <p v-for="(message, index) in chatMessages" :key="index">
-              {{ message }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 자동 Water Time 팝업 -->
-    <div v-if="showWaterPopup" class="water-popup" @click="closeWaterPopup">
-      <p class="popup-title">💧물이 필요해요💧</p>
-      <p class="popup-message">
-        "무럭이 목말라요!" <br />
-        지금 바로 무럭이에게 물을 주세요
-      </p>
-    </div>
-    <div v-if="showPopup" class="popup">
-      {{ popupMessage }}
-    </div>
-  </div>
+  <WeatherContainer>
+    <MooluckContainer />
+    <ChatContainer />
+    <WaterPopup />
+  </WeatherContainer>
 </template>
 
 <script setup>
@@ -54,6 +12,11 @@ import { isWaterTime, checkWaterTime, startWaterTimeInterval } from '@/managers/
 import { showPopup, popupMessage, openPopup } from '@/managers/PopupManager'
 import { fetchWeather, backgroundClass } from '@/managers/WeatherManager'
 import axios from 'axios'
+
+import WeatherContainer from './WeatherContainer.vue'
+import MooluckContainer from './MooluckContainer.vue'
+import ChatContainer from './ChatContainer.vue'
+import WaterPopup from './WaterPopup.vue'
 
 // Elder ID 설정
 const elderId = ref(1)
