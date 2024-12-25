@@ -28,5 +28,44 @@ const handleVideoClick = () => {
 </script>
 
 <style scoped>
-/* MooluckContainer 관련 스타일 */
+.interactive-video {
+  width: 400px;
+  border: none;
+  display: block;
+  margin: 0 auto;
+}
+
+.instruction {
+  color: #f6e5d6;
+  font-size: 2.4rem;
+  font-weight: bold;
+  font-family: 'HakgyoansimDunggeunmisoTTF-B', 'Comic Sans MS', 'Arial', sans-serif;
+  margin-top: 20px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.05em;
+  text-transform: capitalize;
+  -webkit-text-stroke: 2px #6e6e6e;
+}
+
+.water-mode-instruction {
+  color: #ffffff;
+  font-size: 2.4rem;
+  font-weight: bold;
+  font-family: 'HakgyoansimDunggeunmisoTTF-B', 'Comic Sans MS', 'Arial', sans-serif;
+  margin-top: 20px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.05em;
+  text-transform: capitalize;
+  -webkit-text-stroke: 2px #6e6e6e;
+}
+
+.mooluck-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 </style>
