@@ -30,7 +30,7 @@
             required
           />
         </div>
-        <button @click="login" class="submit-button">로그인</button>
+        <button @click="handleLogin" class="submit-button">로그인</button>
         <button @click="goToSignUp" class="signup-button">신규 담당자 등록</button>
       </div>
     </div>
@@ -44,27 +44,40 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { login } from '@/stores/login';
+import { logout } from '@/stores/logout';
 import axios from 'axios'
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
 
-async function login() {
-  try {
-    const response = await axios.post('http://localhost:8080/admin/login', {
-      staff_email: email.value,
-      password: password.value
-    })
-    const token = response.data.response.data.token // JWT 추출
-    localStorage.setItem('token', token) // JWT 저장
-    alert('환영합니다! 오늘도 좋은 하루 되세요.')
-    router.push('/admin') // 관리자 페이지로 이동
-  } catch (error) {
-    console.error('로그인 실패:', error)
-    alert('이메일 또는 비밀번호가 올바르지 않습니다.')
-  }
+function handleLogin() {
+  login(email.value, password.value, router);
 }
+
+function handleLogout() {
+  logout();
+}
+
+//로그인 함수
+// async function login() {
+//   try {
+//     const response = await axios.post('http://localhost:8080/admin/login', {
+//       staff_email: email.value,
+//       password: password.value
+//     })
+//     const token = response.data.response.data.token // JWT 추출
+//     localStorage.setItem('token', token) // JWT 저장
+//     alert('환영합니다! 오늘도 좋은 하루 되세요.')
+//     router.push('/admin') // 관리자 페이지로 이동
+//   } catch (error) {
+//     console.error('로그인 실패:', error)
+//     alert('이메일 또는 비밀번호가 올바르지 않습니다.')
+//   }
+// }
+
+//로그아웃 함수 - 클리어 처리
 
 function goToHome() {
   router.push('/')
