@@ -1,18 +1,46 @@
-// src/managers/WaterTimeManager.js
-import { ref } from 'vue'
+import { ref } from 'vue';
+export const isWaterTime = ref(false);
+let hasGivenWater = false; 
+const waterStartTime = '23:01'; 
+const waterEndTime = '23:05';  
 
-export const isWaterTime = ref(false)
-const waterStartTime = '4:34'
-const waterEndTime = '4:35'
+if (!waterStartTime || !waterEndTime) {
+  console.error('waterStartTime 또는 waterEndTime이 정의되지 않았습니다!');
+}
 
-// 현재 Water Time 상태를 체크하는 함수
+// 현재 시간이 Water Time 범위에 있는지 확인
 export const checkWaterTime = () => {
-  const currentTime = new Date().toTimeString().slice(0, 5) // HH:mm 형식
-  isWaterTime.value = currentTime >= waterStartTime && currentTime <= waterEndTime
-}
+  const currentTime = new Date();
+  const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
 
-// 주기적으로 Water Time 상태를 체크하도록 설정
+  const [startHour, startMinute] = waterStartTime.split(':').map(Number);
+  const [endHour, endMinute] = waterEndTime.split(':').map(Number);
+
+  const startMinutes = startHour * 60 + startMinute;
+  const endMinutes = endHour * 60 + endMinute;
+
+  if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
+    if (!isWaterTime.value) {
+      console.log('WaterTime 시작됨');
+      isWaterTime.value = true; // Water Time 활성화
+      hasGivenWater = false; // 새로운 주기에서는 물을 다시 줘야 함
+    }
+  } else {
+    if (isWaterTime.value) {
+      console.log('WaterTime 종료됨');
+      isWaterTime.value = false; // Water Time 비활성화
+      hasGivenWater = false; // 상태 초기화
+    }
+  }
+};
+
 export const startWaterTimeInterval = () => {
-  checkWaterTime() // 초기 체크
-  setInterval(checkWaterTime, 1000 * 60) // 1분마다 체크
-}
+  checkWaterTime(); // 초기 상태 확인
+  setInterval(checkWaterTime, 1000 * 60); // 1분 간격으로 상태 체크
+};
+
+export const resetWaterTime = () => {
+  console.log('WaterTime 상태 초기화');
+  isWaterTime.value = false;
+  hasGivenWater = true; // 물을 준 상태로 설정
+};

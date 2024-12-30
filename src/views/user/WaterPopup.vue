@@ -1,5 +1,6 @@
+<!-- src/components/WaterPopup.vue -->
 <template>
-  <div v-if="showWaterPopup" class="water-popup" @click="closeWaterPopup">
+  <div class="water-popup" @click="$emit('close')">
     <p class="popup-title">💧물이 필요해요💧</p>
     <p class="popup-message">
       "무럭이 목말라요!" <br />
@@ -9,12 +10,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { defineEmits } from 'vue'
 
-const showWaterPopup = ref(true)
-const closeWaterPopup = () => {
-  showWaterPopup.value = false
-}
+const emit = defineEmits(['close'])
 </script>
 
 <style scoped>
@@ -32,11 +30,15 @@ const closeWaterPopup = () => {
   color: #1e88e5;
   font-size: 1.2rem;
   font-weight: bold;
-  z-index: 1001;
+  z-index: 1551;
   cursor: url('@/assets/water_cursor.png'), pointer;
   animation: fadeInOut 5s forwards;
 }
 
+.popup-title {
+  margin-bottom: 10px;
+}
+/* Fade In-Out Animation */
 @keyframes fadeInOut {
   0% {
     opacity: 0;
