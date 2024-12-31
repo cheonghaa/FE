@@ -28,67 +28,92 @@
         </div>
         <button class="submit-button" @click="handleLogin">확인</button>
       </div>
-      <div v-if="authStore.error" class="error-message">{{ authStore.error }}</div>
-      <div v-if="authStore.isLoggedIn" class="success-message"></div>
+
+      <!-- 커스텀 팝업 창 -->
+      <div v-if="showPopup" :class="['popup', popupType]">
+        <p>{{ popupMessage }}</p>
+        <button @click="showPopup = false" class="popup-close">닫기</button>
+      </div>
     </div>
     <div class="admin-login">
       <router-link to="/login">
         <button class="admin-button">관리자</button>
       </router-link>
     </div>
-
-    <!-- 커스텀 팝업 창 -->
-    <div v-if="showPopup" :class="['popup', popupType]">
-      <p>{{ popupMessage }}</p>
-      <button @click="showPopup = false" class="popup-close">닫기</button>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
-import { useAuthStore } from '../stores/authStore'
-import { useRouter } from 'vue-router'
+import { ref, inject } from 'vue';
+import { useRouter } from 'vue-router';
+import { login } from '@/stores/login'; // 통합 login 함수 가져오기
 
-const router = useRouter()
-const authStore = useAuthStore()
+const router = useRouter();
 
-const elderAccount = ref('')
-const elderPwd = ref('')
+// 사용자 입력 상태
+const elderAccount = ref('');
+const elderPwd = ref('');
 
-const handleLoginSuccess = inject('handleLoginSuccess') // 최상위에서 제공받은 함수
+// 팝업 상태
+const showPopup = ref(false);
+const popupMessage = ref('');
+const popupType = ref('');
 
-const showPopup = ref(false)
-const popupMessage = ref('')
-const popupType = ref('') // 'success', 'error' 또는 'warning'
+// 로컬스토리지 키 상수
+const ELDER_TOKEN_KEY = 'elder_token';
+
+// 성공 핸들러 (optional)
+const handleLoginSuccess = inject('handleLoginSuccess');
 
 async function handleLogin() {
-  console.log('아이디:', elderAccount.value)
-  console.log('비밀번호:', elderPwd.value)
+  console.log('Elder 로그인 요청 데이터:', { elderAccount: elderAccount.value, elderPwd: elderPwd.value }); // 요청 데이터 로그
 
   if (!elderAccount.value || !elderPwd.value) {
-    popupMessage.value = '⚠️ 아이디와 비밀번호를 모두 입력해 주세요!\n\n무럭이가 기다리고 있어요 😊'
-    popupType.value = 'warning'
-    showPopup.value = true
-    return
+    showPopupMessage(
+      '⚠️ 아이디와 비밀번호를 모두 입력해 주세요!\n\n무럭이가 기다리고 있어요 😊',
+      'warning'
+    );
+    return;
   }
 
-  await authStore.login(elderAccount.value.trim(), elderPwd.value.trim())
+  try {
+    await login(
+      'elder',
+      { elderAccount: elderAccount.value.trim(), elderPwd: elderPwd.value.trim() },
+      router
+    );
 
-  if (authStore.isLoggedIn) {
-    popupMessage.value = '🎉 로그인 성공!\n\n환영해요! 무럭이가 반겨줄 준비가 되었어요 🌱'
-    popupType.value = 'success'
-    showPopup.value = true
-    handleLoginSuccess()
-    router.push({ name: 'mooluck' })
-  } else {
-    popupMessage.value =
-      '❌ 로그인 실패!\n\n아이디 또는 비밀번호가 맞지 않아요. 다시 시도해 주세요 🌼'
-    popupType.value = 'error'
-    showPopup.value = true
+    const token = localStorage.getItem('elder_token'); // 저장된 토큰 확인
+    if (token) {
+      showPopupMessage(
+        '🎉 로그인 성공!\n\n환영해요! 무럭이가 반겨줄 준비가 되었어요 🌱',
+        'success'
+      );
+      router.push({ name: 'mooluck' }); // 성공 시 이동
+    } else {
+      showPopupMessage(
+        '❌ 로그인 실패!\n\n아이디 또는 비밀번호가 맞지 않아요. 다시 시도해 주세요 🌼',
+        'error'
+      );
+    }
+  } catch (error) {
+    console.error('로그인 처리 중 오류:', error.response?.data || error.message);
+    showPopupMessage(
+      `❌ 로그인 실패: ${error.message || '서버와의 통신에 문제가 발생했습니다. 다시 시도해주세요.'}`,
+      'error'
+    );
   }
 }
+
+
+// 팝업 메시지 설정 함수
+function showPopupMessage(message, type) {
+  popupMessage.value = message;
+  popupType.value = type;
+  showPopup.value = true;
+}
 </script>
+
 
 <style scoped>
 /* 전체 컨테이너 */

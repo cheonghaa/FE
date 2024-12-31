@@ -1,10 +1,8 @@
 <template>
   <div class="container">
-    <!-- 배경 GIF -->
     <div class="background">
       <img src="@/assets/images/green.gif" alt="배경 GIF" class="background-gif" />
     </div>
-    <!-- 로그인 폼 -->
     <div class="content">
       <h1 class="title" @click="goToHome">Admin</h1>
       <div class="form">
@@ -34,7 +32,6 @@
         <button @click="goToSignUp" class="signup-button">신규 담당자 등록</button>
       </div>
     </div>
-    <!-- 뒤로가기 버튼 -->
     <div class="back-button" @click="goBack">
       <span>&larr;</span>
     </div>
@@ -42,58 +39,65 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { login } from '@/stores/login';
-import { logout } from '@/stores/logout';
-import axios from 'axios'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { login } from '@/stores/login'; // 통합 login 함수
+import { logout } from '@/stores/logout'; // 로그아웃 함수
 
-const email = ref('')
-const password = ref('')
-const router = useRouter()
+// 사용자 입력 상태
+const email = ref('');
+const password = ref('');
+const router = useRouter();
 
-function handleLogin() {
-  login(email.value, password.value, router);
+// 관리자 로그인 핸들러
+async function handleLogin() {
+  if (!email.value || !password.value) {
+    alert('⚠️ 이메일과 비밀번호를 입력해 주세요.');
+    return;
+  }
+
+  try {
+    console.log('관리자 로그인 요청 데이터:', { email: email.value, password: password.value });
+
+    await login(
+      'admin',
+      { email: email.value.trim(), password: password.value.trim() },
+      router
+    );
+
+    alert('🎉 로그인 성공! 환영합니다.');
+    router.push('/admin');
+  } catch (error) {
+    console.error('로그인 실패:', error.response?.data || error.message);
+    alert('❌ 로그인 실패: ' + (error.response?.data?.message || '이메일 또는 비밀번호가 올바르지 않습니다.'));
+  }
 }
 
+
+
+// 로그아웃 핸들러
 function handleLogout() {
   logout();
+  alert('로그아웃되었습니다.');
+  router.push('/'); // 홈으로 이동
 }
 
-//로그인 함수
-// async function login() {
-//   try {
-//     const response = await axios.post('http://localhost:8080/admin/login', {
-//       staff_email: email.value,
-//       password: password.value
-//     })
-//     const token = response.data.response.data.token // JWT 추출
-//     localStorage.setItem('token', token) // JWT 저장
-//     alert('환영합니다! 오늘도 좋은 하루 되세요.')
-//     router.push('/admin') // 관리자 페이지로 이동
-//   } catch (error) {
-//     console.error('로그인 실패:', error)
-//     alert('이메일 또는 비밀번호가 올바르지 않습니다.')
-//   }
-// }
-
-//로그아웃 함수 - 클리어 처리
-
+// 라우팅 핸들러
 function goToHome() {
-  router.push('/')
+  router.push('/'); // 홈으로 이동
 }
 
 function goToSignUp() {
-  router.push('/signup') // 회원가입 페이지로 이동
+  router.push('/signup'); // 회원가입 페이지로 이동
 }
 
 function goBack() {
-  router.push('/') // 뒤로가기 버튼 동작: 홈으로 이동
+  router.back(); // 뒤로 가기
 }
 </script>
 
+
 <style scoped>
-/* 전체 컨테이너 */
 .container {
   position: relative;
   width: 100%;
@@ -105,7 +109,6 @@ function goBack() {
   font-family: 'Roboto', Arial, sans-serif;
 }
 
-/* 배경 GIF */
 .background {
   position: absolute;
   top: 0;
@@ -124,7 +127,7 @@ function goBack() {
   filter: blur(2px);
 }
 
-/* 로그인 폼 */
+
 .content {
   z-index: 1;
   text-align: center;
