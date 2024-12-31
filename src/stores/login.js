@@ -1,4 +1,4 @@
-import axios from 'axios'; // axios 모듈 import
+import axios from 'axios';
 
 
 export async function elderLogin(elderAccount, elderPwd) {
@@ -8,12 +8,12 @@ export async function elderLogin(elderAccount, elderPwd) {
       elderPwd,
     });
 
-    console.log('서버 응답:', response.data); // 응답 데이터 확인
+    console.log('서버 응답:', response.data);
 
-    // success와 token 처리
+
     if (response.data.success === 'true' && response.data.response?.data?.accessToken) {
-      const token = response.data.response.data.accessToken; // accessToken 추출
-      localStorage.setItem('elder_token', token); // localStorage에 저장
+      const token = response.data.response.data.accessToken;
+      localStorage.setItem('elder_token', token);
     } else {
       throw new Error(response.data.response?.message || '로그인 실패: 토큰이 없습니다.');
     }
@@ -33,10 +33,10 @@ export async function adminLogin(email, password) {
 
     console.log('서버 응답:', response.data);
 
-    // success가 문자열일 가능성 처리
+
     if (response.data.success === 'true' || response.data.success === true) {
-      const token = response.data.response.data.token; // 서버에서 반환된 accessToken
-      localStorage.setItem('admin_token', token); // accessToken 저장
+      const token = response.data.response.data.token;
+      localStorage.setItem('admin_token', token);
     } else {
       throw new Error(response.data.message || 'Invalid admin credentials');
     }

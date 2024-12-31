@@ -41,15 +41,14 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { login } from '@/stores/login'; // 통합 login 함수
-import { logout } from '@/stores/logout'; // 로그아웃 함수
+import { login } from '@/stores/login'; 
+import { logout } from '@/stores/logout';
 
-// 사용자 입력 상태
 const email = ref('');
 const password = ref('');
 const router = useRouter();
 
-// 관리자 로그인 핸들러
+
 async function handleLogin() {
   if (!email.value || !password.value) {
     alert('⚠️ 이메일과 비밀번호를 입력해 주세요.');
@@ -75,7 +74,6 @@ async function handleLogin() {
 
 
 
-// 로그아웃 핸들러
 function handleLogout() {
   logout();
   alert('로그아웃되었습니다.');

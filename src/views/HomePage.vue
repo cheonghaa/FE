@@ -46,23 +46,21 @@
 <script setup>
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { login } from '@/stores/login'; // 통합 login 함수 가져오기
+import { login } from '@/stores/login';
+import { logout } from '@/stores/logout';
 
 const router = useRouter();
-
-// 사용자 입력 상태
 const elderAccount = ref('');
 const elderPwd = ref('');
 
-// 팝업 상태
+
 const showPopup = ref(false);
 const popupMessage = ref('');
 const popupType = ref('');
 
-// 로컬스토리지 키 상수
 const ELDER_TOKEN_KEY = 'elder_token';
 
-// 성공 핸들러 (optional)
+
 const handleLoginSuccess = inject('handleLoginSuccess');
 
 async function handleLogin() {
@@ -83,13 +81,13 @@ async function handleLogin() {
       router
     );
 
-    const token = localStorage.getItem('elder_token'); // 저장된 토큰 확인
+    const token = localStorage.getItem('elder_token');
     if (token) {
       showPopupMessage(
         '🎉 로그인 성공!\n\n환영해요! 무럭이가 반겨줄 준비가 되었어요 🌱',
         'success'
       );
-      router.push({ name: 'mooluck' }); // 성공 시 이동
+      router.push({ name: 'mooluck' });
     } else {
       showPopupMessage(
         '❌ 로그인 실패!\n\n아이디 또는 비밀번호가 맞지 않아요. 다시 시도해 주세요 🌼',
@@ -105,8 +103,13 @@ async function handleLogin() {
   }
 }
 
+function handleLogout() {
+  logout();
+  alert('로그아웃되었습니다.');
+  router.push('/');
+}
 
-// 팝업 메시지 설정 함수
+
 function showPopupMessage(message, type) {
   popupMessage.value = message;
   popupType.value = type;
@@ -116,7 +119,6 @@ function showPopupMessage(message, type) {
 
 
 <style scoped>
-/* 전체 컨테이너 */
 .container {
   position: relative;
   width: 100%;
