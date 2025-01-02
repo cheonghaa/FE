@@ -2,7 +2,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { pageTitles, adminRoutes, navigationLinks } from '@/config';
 import { theme } from '@/theme';
-import { messages } from '@/i18n';
+import { messages } from '@/navigation';
 import { images } from '@/images'; // 여기에서 올바르게 import
 
 export function useAppSettings(language = 'ko') {
