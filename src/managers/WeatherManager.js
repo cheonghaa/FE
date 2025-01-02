@@ -35,10 +35,10 @@ const getWeatherDescription = (icon) => {
     '03': 'Clouds',
     '04': 'Broken Clouds',
     '09': 'Rain',
-    10: 'Rain',
-    11: 'Rain',
-    13: 'Snow',
-    50: 'Mist'
+    '10': 'Rain',
+    '11': 'Rain',
+    '13': 'Snow',
+    '50': 'Mist'
   }
   const code = icon.slice(0, 2)
   return weatherMapping[code] || 'Default'
@@ -54,10 +54,10 @@ const setBackground = (icon) => {
     '03': `clouds${dayNight}`,
     '04': `brokenClouds${dayNight}`,
     '09': `rain${dayNight}`,
-    10: `rain${dayNight}`,
-    11: `rain${dayNight}`,
-    13: `snow${dayNight}`,
-    50: `mist${dayNight}`
+    '10': `rain${dayNight}`,
+    '11': `rain${dayNight}`,
+    '13': `snow${dayNight}`,
+    '50': `mist${dayNight}`
   }
   backgroundClass.value = backgroundMapping[code] || 'default'
 }
