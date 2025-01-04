@@ -44,78 +44,83 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { login } from '@/stores/login';
-import { logout } from '@/stores/logout';
 
 const router = useRouter();
 const elderAccount = ref('');
 const elderPwd = ref('');
 
-
-const showPopup = ref(false);
 const popupMessage = ref('');
 const popupType = ref('');
+const showPopup = ref(false);
 
 const ELDER_TOKEN_KEY = 'elder_token';
 
-
-const handleLoginSuccess = inject('handleLoginSuccess');
-
 async function handleLogin() {
-  console.log('Elder 로그인 요청 데이터:', { elderAccount: elderAccount.value, elderPwd: elderPwd.value }); // 요청 데이터 로그
+  console.log('로그인 요청 데이터:', { elderAccount: elderAccount.value, elderPwd: elderPwd.value });
 
-  if (!elderAccount.value || !elderPwd.value) {
-    showPopupMessage(
-      '⚠️ 아이디와 비밀번호를 모두 입력해 주세요!\n\n무럭이가 기다리고 있어요 😊',
-      'warning'
-    );
+  if (!elderAccount.value.trim() || !elderPwd.value.trim()) {
+    showPopupMessage('⚠️ 아이디와 비밀번호를 모두 입력해 주세요!', 'warning');
     return;
   }
 
   try {
-    await login(
-      'elder',
-      { elderAccount: elderAccount.value.trim(), elderPwd: elderPwd.value.trim() },
-      router
-    );
+    // 로그인 요청
+    const token = await login('elder', {
+      elderAccount: elderAccount.value.trim(),
+      elderPwd: elderPwd.value.trim(),
+    });
 
-    const token = localStorage.getItem('elder_token');
     if (token) {
-      showPopupMessage(
-        '🎉 로그인 성공!\n\n환영해요! 무럭이가 반겨줄 준비가 되었어요 🌱',
-        'success'
+      localStorage.setItem('elder_token', token); // 토큰 저장
+
+      // 토큰 검증
+      const response = await axios.post(
+        'http://localhost:8080/auth/validate',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      router.push({ name: 'mooluck' });
+
+      if (response.status === 200) {
+        showPopupMessage('🎉 로그인 성공! 환영합니다!', 'success');
+        router.push({ name: 'mooluck' }); // 보호된 페이지로 이동
+      }
     } else {
-      showPopupMessage(
-        '❌ 로그인 실패!\n\n아이디 또는 비밀번호가 맞지 않아요. 다시 시도해 주세요 🌼',
-        'error'
-      );
+      throw new Error('로그인 성공했지만 토큰이 없습니다.');
     }
   } catch (error) {
-    console.error('로그인 처리 중 오류:', error.response?.data || error.message);
-    showPopupMessage(
-      `❌ 로그인 실패: ${error.message || '서버와의 통신에 문제가 발생했습니다. 다시 시도해주세요.'}`,
-      'error'
-    );
+    console.error('로그인 처리 중 오류:', error.message);
+    showPopupMessage(`❌ 로그인 실패: ${error.response?.data?.error || '서버 오류'}`, 'error');
   }
 }
 
 function handleLogout() {
-  logout();
+  localStorage.removeItem(ELDER_TOKEN_KEY); // 토큰 삭제
   alert('로그아웃되었습니다.');
-  router.push('/');
+  router.push('/'); // 홈 페이지로 리다이렉트
 }
-
 
 function showPopupMessage(message, type) {
   popupMessage.value = message;
   popupType.value = type;
   showPopup.value = true;
+
+  // 3초 후 팝업 자동 닫기
+  setTimeout(() => {
+    showPopup.value = false;
+  }, 3000);
 }
 </script>
+
+
+
 
 
 <style scoped>

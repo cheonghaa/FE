@@ -47,33 +47,72 @@
     </div>
   </div>
 </template>
-
 <script setup>
-import { onMounted, ref, watch } from 'vue'
-import { isWaterTime, checkWaterTime, startWaterTimeInterval } from '@/managers/WaterTimeManager'
-import { showPopup, popupMessage, openPopup } from '@/managers/PopupManager'
-import { fetchWeather, backgroundClass } from '@/managers/WeatherManager'
-import axios from 'axios'
+import { onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { isWaterTime, checkWaterTime, startWaterTimeInterval } from '@/managers/WaterTimeManager';
+import { showPopup, openPopup } from '@/managers/PopupManager';
+import { fetchWeather } from '@/managers/WeatherManager';
+import { logout } from '@/stores/logout';
+import axios from 'axios';
 
 // Elder ID 설정
-const elderId = ref(1)
+const elderId = ref(1);
 
-// 자동 Water Time 팝업 상태
-const showWaterPopup = ref(false)
+// 상태 변수
+const showWaterPopup = ref(false); // Water Time 팝업 상태
+const chatMessages = ref([]); // 대화 메시지 상태
+const isHovering = ref(false); // 호버 상태
 
-const chatMessages = ref([])
+const router = useRouter();
+const ELDER_TOKEN_KEY = 'elder_token';
 
-const isHovering = ref(false)
+// 페이지 보호 로직: 토큰 확인 및 검증
+onMounted(async () => {
+  const token = localStorage.getItem(ELDER_TOKEN_KEY);
 
-const setHover = (hover) => {
-  isHovering.value = hover
-  if (hover) {
-    const cursorUrl = new URL('@/assets/pet_cursor.png', import.meta.url).href
-    document.body.style.cursor = `url(${cursorUrl}), pointer`
-  } else {
-    document.body.style.cursor = 'default' // 기본 커서로 복원
+  if (!token) {
+    alert('다시 로그인 해주세요.');
+    router.push('/');
+    return;
   }
-}
+
+  try {
+    // 서버에서 토큰 검증 요청
+    const response = await axios.post(
+      'http://localhost:8080/auth/validate',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Bearer 토큰 형식으로 전달
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    if (response.status !== 200 || response.data !== 'Token is valid') {
+      throw new Error('유효하지 않은 토큰입니다.');
+    }
+
+    console.log('토큰 검증 성공: 페이지 로드');
+  } catch (error) {
+    console.error('토큰 검증 실패:', error.message);
+    alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
+    localStorage.removeItem(ELDER_TOKEN_KEY); // 유효하지 않은 토큰 삭제
+    router.push('/'); // 홈 페이지로 리다이렉트
+  }
+});
+
+// 커서 변경 로직
+const setHover = (hover) => {
+  isHovering.value = hover;
+  if (hover) {
+    const cursorUrl = new URL('@/assets/pet_cursor.png', import.meta.url).href;
+    document.body.style.cursor = `url(${cursorUrl}), pointer`;
+  } else {
+    document.body.style.cursor = 'default'; // 기본 커서로 복원
+  }
+};
 
 // 실시간 STT-TTS 대화 시작
 const startChat = async () => {
@@ -83,78 +122,83 @@ const startChat = async () => {
       {},
       {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         }
       }
-    )
-    // 응답 데이터에서 stt_text와 tts_text 추출
-    const { stt_text, tts_text } = response.data
+    );
 
-    console.log('오디오 응답:', response.data)
+    const { stt_text, tts_text } = response.data;
 
-    chatMessages.value.push(`문희: ${stt_text}`)
-    chatMessages.value.push(`무럭이: ${tts_text}`)
+    console.log('오디오 응답:', response.data);
 
-    openPopup(response.data.message)
+    chatMessages.value.push(`문희: ${stt_text}`);
+    chatMessages.value.push(`무럭이: ${tts_text}`);
+
+    openPopup(response.data.message);
   } catch (error) {
-    console.error('대화 중 오류 발생:', error)
-
-    chatMessages.value.push('무럭이와 대화에 실패했어요 😭')
-    openPopup('오류가 발생했어요. 다시 시도해 주세요. 😭')
+    console.error('대화 중 오류 발생:', error);
+    chatMessages.value.push('무럭이와 대화에 실패했어요 😭');
+    openPopup('오류가 발생했어요. 다시 시도해 주세요. 😭');
   }
-}
+};
 
+// 물 주기 또는 쓰다듬기 처리
 const handleVideoClick = async () => {
   try {
-    if (isWaterTime.value) {
-      // 물 주기 API 호출
-      const response = await axios.post(
-        'http://localhost:8080/interaction/water',
-        { elderId: elderId.value },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      console.log('물 주기 응답:', response.data)
-      openPopup('무럭이에게 물을 주었어요💧무럭이가 아주 좋아해요🌱')
-    } else {
-      // 쓰다듬기 API 호출
-      const response = await axios.post(
-        'http://localhost:8080/interaction/pet',
-        { elderId: elderId.value },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      console.log('쓰다듬기 응답:', response.data)
+    const apiUrl = isWaterTime.value
+      ? 'http://localhost:8080/interaction/water'
+      : 'http://localhost:8080/interaction/pet';
 
-      openPopup('무럭이를 쓰다듬었어요✨ 무럭이가 행복해하고 있어요💚')
+    const response = await axios.post(
+      apiUrl,
+      { elderId: elderId.value },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ELDER_TOKEN_KEY)}`, // Bearer 토큰 추가
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    if (isWaterTime.value) {
+      console.log('물 주기 응답:', response.data);
+      openPopup('무럭이에게 물을 주었어요💧무럭이가 아주 좋아해요🌱');
+    } else {
+      console.log('쓰다듬기 응답:', response.data);
+      openPopup('무럭이를 쓰다듬었어요✨ 무럭이가 행복해하고 있어요💚');
     }
   } catch (error) {
-    console.error('비디오 호출 중 오류 발생:', error)
-    openPopup('오류가 발생했어요. 다시 시도해 주세요. 😭')
+    console.error('비디오 호출 중 오류 발생:', error);
+    openPopup('오류가 발생했어요. 다시 시도해 주세요. 😭');
   }
-}
+};
 
 // Water Time에 따른 자동 팝업 처리
 watch(isWaterTime, (newVal) => {
   if (newVal) {
-    showWaterPopup.value = true // Water Time 팝업 표시
+    showWaterPopup.value = true;
     setTimeout(() => {
-      showWaterPopup.value = false // 4분 후 자동으로 팝업 닫기
-    }, 240000)
+      showWaterPopup.value = false;
+    }, 240000); // 4분 후 팝업 자동 닫기
   }
-})
+});
 
 // Water Time 팝업 닫기 (사용자 클릭 시)
 const closeWaterPopup = () => {
-  showWaterPopup.value = false
-  isWaterTime.value = false // Water Time 상태 해제
-}
+  showWaterPopup.value = false;
+  isWaterTime.value = false; // Water Time 상태 해제
+};
 
 // 컴포넌트 마운트 시 실행
 onMounted(() => {
-  fetchWeather()
-  checkWaterTime()
-  startWaterTimeInterval() // 주기적으로 Water Time 체크
-})
+  fetchWeather(); // 날씨 데이터 가져오기
+  checkWaterTime(); // Water Time 확인
+  startWaterTimeInterval(); // Water Time 주기적 체크 시작
+});
 </script>
+
+
+
 
 <style scoped>
 /* 챗봇 */
