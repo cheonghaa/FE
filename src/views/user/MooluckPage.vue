@@ -15,7 +15,6 @@
     <Popup v-if="showPopup" :message="popupMessage" />
   </div>
 </template>
-
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import MooluckContainer from './MooluckContainer.vue'
@@ -25,6 +24,8 @@ import WaterPopup from './WaterPopup.vue'
 import { isWaterTime, checkWaterTime, startWaterTimeInterval } from '@/managers/WaterTimeManager'
 import { showPopup, popupMessage, openPopup } from '@/managers/PopupManager'
 import { fetchWeather, backgroundClass } from '@/managers/WeatherManager'
+import { useRouter } from 'vue-router';
+// import { logout } from '@/stores/logout'; 아직 안씀
 import axios from 'axios'
 
 const waterCursor = `url(${new URL('@/assets/water_cursor.png', import.meta.url).href}), pointer`;
@@ -40,6 +41,46 @@ const setHover = (hover) => {
     ? `url(${new URL('@/assets/pet_cursor.png', import.meta.url).href}), pointer`
     : 'default'
 }
+
+const router = useRouter();
+const ELDER_TOKEN_KEY = 'elder_token';
+
+// 페이지 보호 로직: 토큰 확인 및 검증
+onMounted(async () => {
+  const token = localStorage.getItem(ELDER_TOKEN_KEY);
+
+  if (!token) {
+    alert('다시 로그인 해주세요.');
+    router.push('/');
+    return;
+  }
+
+  try {
+    // 서버에서 토큰 검증 요청
+    const response = await axios.post(
+      'http://localhost:8080/auth/validate',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Bearer 토큰 형식으로 전달
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    if (response.status !== 200 || response.data !== 'Token is valid') {
+      throw new Error('유효하지 않은 토큰입니다.');
+    }
+
+    console.log('토큰 검증 성공: 페이지 로드');
+  } catch (error) {
+    console.error('토큰 검증 실패:', error.message);
+    alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
+    localStorage.removeItem(ELDER_TOKEN_KEY); // 유효하지 않은 토큰 삭제
+    router.push('/'); // 홈 페이지로 리다이렉트
+  }
+});
+
 // 실시간 STT-TTS 대화 시작
 const startChat = async () => {
   try {
@@ -48,26 +89,25 @@ const startChat = async () => {
       {},
       {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         }
       }
-    )
-    // 응답 데이터에서 stt_text와 tts_text 추출
-    const { stt_text, tts_text } = response.data
+    );
 
-    console.log('오디오 응답:', response.data)
+    const { stt_text, tts_text } = response.data;
 
-    chatMessages.value.push(`문희: ${stt_text}`)
-    chatMessages.value.push(`무럭이: ${tts_text}`)
+    console.log('오디오 응답:', response.data);
 
-    openPopup(response.data.message)
+    chatMessages.value.push(`문희: ${stt_text}`);
+    chatMessages.value.push(`무럭이: ${tts_text}`);
+
+    openPopup(response.data.message);
   } catch (error) {
-    console.error('대화 중 오류 발생:', error)
-
-    chatMessages.value.push('무럭이와 대화에 실패했어요 😭')
-    openPopup('오류가 발생했어요. 다시 시도해 주세요. 😭')
+    console.error('대화 중 오류 발생:', error);
+    chatMessages.value.push('무럭이와 대화에 실패했어요 😭');
+    openPopup('오류가 발생했어요. 다시 시도해 주세요. 😭');
   }
-}
+};
 
 // 물 주기 API 호출 함수
 const handleWaterInteraction = async () => {
@@ -173,6 +213,8 @@ onMounted(() => {
   startWaterTimeInterval()
 })
 </script>
+
+
 
 <style scoped>
 /* 메인 스타일은 하위 컴포넌트로 이전됨 */
