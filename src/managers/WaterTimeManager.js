@@ -1,8 +1,8 @@
 import { ref } from 'vue';
 export const isWaterTime = ref(false);
 let hasGivenWater = false; 
-const waterStartTime = '23:01'; 
-const waterEndTime = '23:05';  
+const waterStartTime = '18:00'; 
+const waterEndTime = '18:30';  
 
 if (!waterStartTime || !waterEndTime) {
   console.error('waterStartTime 또는 waterEndTime이 정의되지 않았습니다!');

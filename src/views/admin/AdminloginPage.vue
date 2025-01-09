@@ -1,10 +1,8 @@
 <template>
   <div class="container">
-    <!-- 배경 GIF -->
     <div class="background">
       <img src="@/assets/images/green.gif" alt="배경 GIF" class="background-gif" />
     </div>
-    <!-- 로그인 폼 -->
     <div class="content">
       <h1 class="title" @click="goToHome">Admin</h1>
       <div class="form">
@@ -30,11 +28,10 @@
             required
           />
         </div>
-        <button @click="login" class="submit-button">로그인</button>
+        <button @click="handleLogin" class="submit-button">로그인</button>
         <button @click="goToSignUp" class="signup-button">신규 담당자 등록</button>
       </div>
     </div>
-    <!-- 뒤로가기 버튼 -->
     <div class="back-button" @click="goBack">
       <span>&larr;</span>
     </div>
@@ -42,45 +39,75 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { login } from '@/stores/login'; // login.js import
+import { logout } from '@/stores/logout'; // logout.js import
 
-const email = ref('')
-const password = ref('')
-const router = useRouter()
+const email = ref('');
+const password = ref('');
+const router = useRouter();
 
-async function login() {
-  try {
-    const response = await axios.post('http://localhost:8080/admin/login', {
-      staff_email: email.value,
-      password: password.value
-    })
-    const token = response.data.response.data.token // JWT 추출
-    localStorage.setItem('token', token) // JWT 저장
-    alert('환영합니다! 오늘도 좋은 하루 되세요.')
-    router.push('/admin') // 관리자 페이지로 이동
-  } catch (error) {
-    console.error('로그인 실패:', error)
-    alert('이메일 또는 비밀번호가 올바르지 않습니다.')
+async function handleLogin() {
+  if (!email.value.trim() || !password.value.trim()) {
+    alert('⚠️ 이메일과 비밀번호를 입력해 주세요.');
+    return;
   }
+
+  try {
+    console.log('관리자 로그인 요청 데이터:', { email: email.value, password: password.value });
+
+    // login.js의 adminLogin 호출
+    const token = await login('admin', { email: email.value.trim(), password: password.value.trim() });
+    console.log('Admin 토큰 저장 완료:', token);
+
+    if (token) {
+      //localStorage.setItem('admin_token', token); // 토큰 저장
+
+      // 토큰 검증
+      const response = await axios.post(
+        'http://localhost:8080/auth/validate',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+       // showPopupMessage('🎉 로그인 성공! 환영합니다!', 'success');
+       alert('🎉 로그인 성공! 관리자 페이지로 이동합니다.'); 
+       router.push({ name: 'admin' }); // 보호된 페이지로 이동
+      }
+    } else {
+      throw new Error('로그인 성공했지만 토큰이 없습니다.');
+    }
+  } catch (error) {
+    console.error('로그인 처리 중 오류:', error.message);
+    // showPopupMessage(`❌ 로그인 실패: ${error.response?.data?.error || '서버 오류'}`, 'error');
+  }
+
+  //   alert('🎉 로그인 성공! 관리자 페이지로 이동합니다.');
+  //   router.push('/admin'); // 관리자 보호 페이지로 이동
+  // } catch (error) {
+  //   console.error('로그인 실패:', error.message);
+  //   alert(`❌ 로그인 실패: ${error.message}`);
+  // }
 }
 
-function goToHome() {
-  router.push('/')
-}
-
-function goToSignUp() {
-  router.push('/signup') // 회원가입 페이지로 이동
-}
-
-function goBack() {
-  router.push('/') // 뒤로가기 버튼 동작: 홈으로 이동
+function handleLogout() {
+  logout('admin'); // Logout.js 호출 (admin 로그아웃)
+  alert('로그아웃되었습니다.');
+  router.push('/'); // 홈 페이지로 이동
 }
 </script>
 
+
+
+
 <style scoped>
-/* 전체 컨테이너 */
 .container {
   position: relative;
   width: 100%;
@@ -92,7 +119,6 @@ function goBack() {
   font-family: 'Roboto', Arial, sans-serif;
 }
 
-/* 배경 GIF */
 .background {
   position: absolute;
   top: 0;
@@ -111,7 +137,7 @@ function goBack() {
   filter: blur(2px);
 }
 
-/* 로그인 폼 */
+
 .content {
   z-index: 1;
   text-align: center;
