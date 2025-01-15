@@ -93,13 +93,9 @@ const startChat = async () => {
         }
       }
     );
-
-    const { stt_text, tts_text } = response.data;
-
-    console.log('오디오 응답:', response.data);
-
-    chatMessages.value.push(`문희: ${stt_text}`);
-    chatMessages.value.push(`무럭이: ${tts_text}`);
+    const {  recognized_text,answer } = response.data;
+    chatMessages.value.push(`문희: ${ recognized_text}`);
+    chatMessages.value.push(`무럭이: ${answer}`);
 
     openPopup(response.data.message);
   } catch (error) {
