@@ -48,13 +48,11 @@ const startChat = () => {
 .chat-box {
   position: relative; /* 자식 요소가 이 요소를 기준으로 정렬 */
   width: 100%; /* 부모 요소의 너비를 화면에 맞춤 */
-  max-width: 600px; /* 원하는 최대 너비 설정 */
+  max-width: 800px; /* 원하는 최대 너비 설정 */
   height: auto; /* 부모 요소의 높이를 자식 내용에 따라 조정 */
   margin: 20px auto; /* 중앙 정렬 */
-  border: 2px solid #ddd; /* 선 추가 */
   border-radius: 15px; /* 모서리를 둥글게 */
   overflow: hidden; /* 내용이 넘치지 않도록 */
-  background-color: #fefefe; /* 배경색 추가 */
 }
 
 .chat-bg {
