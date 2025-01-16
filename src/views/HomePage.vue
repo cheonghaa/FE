@@ -57,7 +57,7 @@ const popupMessage = ref('');
 const popupType = ref('');
 const showPopup = ref(false);
 
-const ELDER_TOKEN_KEY = 'elder_token';
+// const ELDER_TOKEN_KEY = 'elder_token';
 
 async function handleLogin() {
   console.log('로그인 요청 데이터:', { elderAccount: elderAccount.value, elderPwd: elderPwd.value });
@@ -101,11 +101,11 @@ async function handleLogin() {
   }
 }
 
-function handleLogout() {
-  localStorage.removeItem(ELDER_TOKEN_KEY); // 토큰 삭제
-  alert('로그아웃되었습니다.');
-  router.push('/'); // 홈 페이지로 리다이렉트
-}
+// function handleLogout() {
+//   localStorage.removeItem(ELDER_TOKEN_KEY); // 토큰 삭제
+//   alert('로그아웃되었습니다.');
+//   router.push('/'); // 홈 페이지로 리다이렉트
+// }
 
 function showPopupMessage(message, type) {
   popupMessage.value = message;

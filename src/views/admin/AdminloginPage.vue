@@ -43,7 +43,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { login } from '@/stores/login'; // login.js import
-import { logout } from '@/stores/logout'; // logout.js import
+// import { logout } from '@/stores/logout'; // logout.js import
 
 const email = ref('');
 const password = ref('');
@@ -97,11 +97,11 @@ async function handleLogin() {
   // }
 }
 
-function handleLogout() {
-  logout('admin'); // Logout.js 호출 (admin 로그아웃)
-  alert('로그아웃되었습니다.');
-  router.push('/'); // 홈 페이지로 이동
-}
+// function handleLogout() {
+//   logout('admin'); // Logout.js 호출 (admin 로그아웃)
+//   alert('로그아웃되었습니다.');
+//   router.push('/'); // 홈 페이지로 이동
+// }
 </script>
 
 
