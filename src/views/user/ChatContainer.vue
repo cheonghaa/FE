@@ -20,6 +20,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { defineEmits } from 'vue'
 
 const props = defineProps({
   chatMessages: {
@@ -27,6 +28,9 @@ const props = defineProps({
     required: true,
   },
 });
+
+
+
 
 const emit = defineEmits(['startChat']);
 
