@@ -117,18 +117,12 @@ const fetchData = async (staffId) => {
   const token = localStorage.getItem(ADMIN_TOKEN_KEY);
 
   try {
-    console.log("관리자 staffId:", staffId);
-    console.log("관리자 token:", token);
     const response = await axios.get(`http://localhost:8080/admin/table?staffId=${staffId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log("API 호출 성공:");
-    console.log("API 응답 데이터:", response.data);
-
-    console.log('API 응답 데이터:', response.data);
 
     const data = response.data.response.data;
     records.value = data.map((item) => ({
@@ -221,7 +215,6 @@ const drawBarChart = () => {
 const rowClickHandler = (index) => {
   if (index >= 0 && index < records.value.length) {
     const record = records.value[index]
-    console.log(`Row clicked: ${record.elderId}`)
     const ctx = document.getElementById(chartContainer).getContext('2d')
 
     if (barChart) barChart.destroy()
@@ -298,7 +291,7 @@ onMounted(async () => {
         throw new Error('유효하지 않은 토큰입니다.');
       }
 
-      console.log('토큰 검증 성공: 페이지 로드');
+    
     } catch (error) {
       console.error('토큰 검증 실패:', error.message);
       alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
@@ -341,7 +334,6 @@ thead {
   background-color: #f2f2f2;
 }
 
-/* 우상단 아이콘 버튼 스타일 */
 .button-container {
   position: absolute;
   top: 20px;

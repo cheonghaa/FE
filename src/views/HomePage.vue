@@ -57,8 +57,6 @@ const showPopup = ref(false);
 
 
 async function handleLogin() {
-  console.log('로그인 요청 데이터:', { elderAccount: elderAccount.value, elderPwd: elderPwd.value });
-
   if (!elderAccount.value.trim() || !elderPwd.value.trim()) {
     showPopupMessage('⚠️ 아이디와 비밀번호를 모두 입력해 주세요!', 'warning');
     return;

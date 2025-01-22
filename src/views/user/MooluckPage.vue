@@ -69,7 +69,6 @@ onMounted(async () => {
       throw new Error('유효하지 않은 토큰입니다.');
     }
 
-    console.log('토큰 검증 성공: 페이지 로드');
   } catch (error) {
     console.error('토큰 검증 실패:', error.message);
     alert('세션이 만료되었습니다. 다시 로그인 해주세요.');
@@ -115,11 +114,8 @@ const handleWaterInteraction = async () => {
     handleApiError(error); 
   }
 };
-console.log('물 주기 API 호출 시작');
-console.log('elderId 값:', elderId.value); 
 
 const handlePetInteraction = async () => {
-  console.log('쓰다듬기 API 호출 시작');
   try {
     const response = await axios.post(
       'http://localhost:8080/interaction/pet',
@@ -145,57 +141,44 @@ const handleApiError = (error) => {
 };
 
 const handleVideoClick = async () => {
-  console.log('handleVideoClick 호출됨');
-  console.log('isWaterTime 상태:', isWaterTime.value);
-  console.log('hasGivenWater 상태:', hasGivenWater);
+
   if (!elderId.value) {
-    console.error('elderId가 유효하지 않습니다:', elderId.value);
     openPopup('elderId가 설정되지 않았습니다. 다시 시도해 주세요.');
     return;
   }
 
   if (isWaterTime.value && !hasGivenWater) {
-    console.log('Water Time 상태 - 물 주기 API 호출');
     await handleWaterInteraction();
     hasGivenWater = true; 
-    console.log('Water Time 상태 - 물 주기 완료');
   } else if (!isWaterTime.value) {
-    console.log('Water Time이 아님 - 쓰다듬기 API 호출');
     await handlePetInteraction();
   } else {
-    console.log('이미 물을 준 상태입니다.');
     openPopup('무럭이는 이미 물을 받았어요 💧');
   }
 
   if (isWaterTime.value && hasGivenWater) {
-    console.log('Water Time 종료 처리');
     isWaterTime.value = false; 
   }
 };
 
 if (isWaterTime.value && hasGivenWater) {
-  console.log('Water Time 상태 종료 준비');
   isWaterTime.value = false;
 }
 
 const closeWaterPopup = () => {
   if (showWaterPopup.value) {
-    console.log('Water Time 팝업 닫기');
     showWaterPopup.value = false;
   }
 };
 
 
 watch(isWaterTime, (newVal) => {
-  console.log('isWaterTime 상태 변경:', newVal);
   showWaterPopup.value = newVal;
-  console.log('showWaterPopup 상태:', showWaterPopup.value);
 });
 
 
 onMounted(() => {
   fetchWeather()
-  console.log('컴포넌트 마운트됨');
   checkWaterTime()
   startWaterTimeInterval()
 })
