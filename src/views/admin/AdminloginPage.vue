@@ -79,6 +79,11 @@ async function handleLogin() {
     console.error('로그인 처리 중 오류:', error.message);
   }
 }
+
+function goBack() {
+  router.push({ name: 'home' });
+}
+
 </script>
 
 <style scoped>

@@ -215,6 +215,7 @@ const drawBarChart = () => {
 const rowClickHandler = (index) => {
   if (index >= 0 && index < records.value.length) {
     const record = records.value[index]
+    
     const ctx = document.getElementById(chartContainer).getContext('2d')
 
     if (barChart) barChart.destroy()
