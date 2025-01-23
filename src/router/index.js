@@ -35,12 +35,7 @@ const routes = [
     component: () => import('@/views/user/MooluckPage.vue'),
     meta: { requiresAuth: true } // 인증이 필요한 라우트
   },
-  {
-    path: '/interaction',
-    name: 'interaction',
-    component: () => import('@/views/user/MooluckInteractionPage.vue'),
-    meta: { requiresAuth: true } // 인증이 필요한 라우트
-  },
+
   // 404 페이지 라우트
   {
     path: '/:pathMatch(.*)*', // 모든 일치하지 않는 경로
